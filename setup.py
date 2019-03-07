@@ -1,7 +1,9 @@
 import pathlib
 from setuptools import setup
 
-from .alma import __version__ as version
+version = {}
+with open("./alma/version.py") as fp:
+    exec(fp.read(), version)
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -13,7 +15,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="alma-python-client",
-    version=version,
+    version=version["__version__"],
     description="Python API client for the Alma Installments API",
     long_description=README,
     long_description_content_type="text/markdown",

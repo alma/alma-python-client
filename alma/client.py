@@ -1,7 +1,8 @@
 import logging
 import platform
 
-from . import __version__ as alma_version, endpoints
+from .version import __version__ as alma_version
+from . import endpoints
 from .api_modes import ApiMode
 from .context import Context
 
