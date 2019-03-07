@@ -1,6 +1,6 @@
 import requests
 
-from . import Response
+from .response import Response
 
 
 class RequestError(Exception):

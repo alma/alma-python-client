@@ -1,5 +1,5 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup, find_packages
 
 version = {}
 with open("./alma/version.py") as fp:
@@ -28,7 +28,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
     ],
-    packages=["alma"],
+    packages=find_packages(),
     include_package_data=True,
     install_requires=["requests"],
 )
