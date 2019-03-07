@@ -1,4 +1,4 @@
-from alma.request import Request
+from ..request import Request
 
 
 class Base:

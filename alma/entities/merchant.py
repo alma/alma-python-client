@@ -1,4 +1,4 @@
-from alma.entities.base import Base
+from . import Base
 
 
 class Merchant(Base):

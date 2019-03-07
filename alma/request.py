@@ -1,6 +1,6 @@
 import requests
 
-from alma.response import Response
+from . import Response
 
 
 class RequestError(Exception):

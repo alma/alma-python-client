@@ -1,6 +1,5 @@
-from .merchant import Merchant
-from .payment import Payment
-from .installment import Installment
+from .base import Base
 from .eligibility import Eligibility
-
-__all__ = ["Merchant", "Payment", "Installment", "Eligibility"]
+from .installment import Installment, InstallmentState
+from .merchant import Merchant
+from .payment import Payment, PaymentState, PaymentFraudType

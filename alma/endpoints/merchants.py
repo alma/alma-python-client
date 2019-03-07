@@ -1,5 +1,5 @@
-from alma.endpoints.base import Base
-from alma.entities import Merchant
+from . import Base
+from ..entities import Merchant
 
 
 class Merchants(Base):
