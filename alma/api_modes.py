@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class ApiMode(Enum):
-    TEST = 'test'
-    LIVE = 'live'
+class ApiModes(Enum):
+    TEST = "test"
+    LIVE = "live"

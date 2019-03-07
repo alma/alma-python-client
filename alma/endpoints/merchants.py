@@ -1,4 +1,4 @@
-from .base import Base
+from alma.endpoints.base import Base
 from alma.entities import Merchant
 
 

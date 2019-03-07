@@ -1,7 +1,7 @@
 from enum import Enum
 
-from .base import Base
-from .installment import Installment
+from alma.entities.base import Base
+from alma.entities.installment import Installment
 
 
 class PaymentState(Enum):

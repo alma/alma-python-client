@@ -1,10 +1,10 @@
 import logging
 import platform
 
-from .version import __version__ as alma_version
-from . import endpoints
-from .api_modes import ApiMode
-from .context import Context
+from alma.version import __version__ as alma_version
+import alma.endpoints as endpoints
+from alma.api_modes import ApiModes
+from alma.context import Context
 
 
 class Client:
@@ -17,25 +17,25 @@ class Client:
 
         options = {
             "api_root": {
-                ApiMode.TEST: self.SANDBOX_API_URL,
-                ApiMode.LIVE: self.LIVE_API_URL,
+                ApiModes.TEST: self.SANDBOX_API_URL,
+                ApiModes.LIVE: self.LIVE_API_URL,
             },
-            "mode": ApiMode.LIVE,
+            "mode": ApiModes.LIVE,
             "logger": logging.getLogger("alma-python-client"),
             **options,
         }
 
         if type(options["api_root"]) is str:
             options["api_root"] = {
-                ApiMode.TEST: options["api_root"],
-                ApiMode.LIVE: options["api_root"],
+                ApiModes.TEST: options["api_root"],
+                ApiModes.LIVE: options["api_root"],
             }
         elif type(options["api_root"]) is not dict:
             raise TypeError("`api_root` option must be a dict or a string")
 
-        if options["mode"] not in (ApiMode.LIVE, ApiMode.TEST):
+        if options["mode"] not in (ApiModes.LIVE, ApiModes.TEST):
             raise ValueError(
-                f"`mode` option must be one of ({ApiMode.LIVE}, {ApiMode.TEST})"
+                f"`mode` option must be one of ({ApiModes.LIVE}, {ApiModes.TEST})"
             )
 
         self.context = Context(api_key, options)
