@@ -2,7 +2,7 @@ import logging
 import platform
 
 from alma.version import __version__ as alma_version
-import alma.endpoints as endpoints
+from . import endpoints
 from alma.api_modes import ApiModes
 from alma.context import Context
 
