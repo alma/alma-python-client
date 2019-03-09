@@ -41,7 +41,7 @@ class Client:
         self.context = Context(api_key, options)
 
         self.init_user_agent()
-        self.init_endpoints()
+        self._endpoints = {}
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
@@ -50,7 +50,23 @@ class Client:
         self.add_user_agent_component("Python", platform.python_version())
         self.add_user_agent_component("Alma for Python", alma_version)
 
-    def init_endpoints(self):
-        self.payments = endpoints.Payments(self.context)
-        self.merchants = endpoints.Merchants(self.context)
-        self.orders = endpoints.Orders(self.context)
+    def _endpoint(self, endpoint_name):
+        endpoint = self._endpoints.get(endpoint_name)
+
+        if endpoint is None:
+            endpoint = getattr(endpoints, endpoint_name)(self.context)
+            self._endpoints[endpoint] = endpoint
+
+        return endpoint
+
+    @property
+    def payments(self) -> endpoints.Payments:
+        return self._endpoint("Payments")
+
+    @property
+    def merchants(self) -> endpoints.Merchants:
+        return self._endpoint("Merchants")
+
+    @property
+    def orders(self) -> endpoints.Orders:
+        return self._endpoint("Orders")
