@@ -2,6 +2,7 @@ from enum import Enum
 
 from . import Base
 from . import Installment
+from . import Order
 
 
 class PaymentState(Enum):
@@ -53,5 +54,8 @@ class Payment(Base):
             except ValueError:
                 # Pass on unrecognized state values - they will be accessible as-is in the Payment data
                 pass
+
+        orders = data.pop("orders", [])
+        self.orders = [Order(o) for o in orders]
 
         super(Payment, self).__init__(data)
