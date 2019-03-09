@@ -53,3 +53,4 @@ class Client:
     def init_endpoints(self):
         self.payments = endpoints.Payments(self.context)
         self.merchants = endpoints.Merchants(self.context)
+        self.orders = endpoints.Orders(self.context)

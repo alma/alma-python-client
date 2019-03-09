@@ -35,6 +35,10 @@ class Request:
         res = requests.post(self.url, json=self.body, headers=self.headers)
         return self._process_response(res)
 
+    def put(self):
+        res = requests.put(self.url, json=self.body, headers=self.headers)
+        return self._process_response(res)
+
     def _process_response(self, resp):
         response = Response(resp)
 
