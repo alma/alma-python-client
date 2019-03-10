@@ -45,7 +45,7 @@ class Request:
         try:
             resp.raise_for_status()
         except requests.HTTPError as e:
-            if "message" in response.json:
+            if response.is_json() and "message" in response.json:
                 error = response.json["message"]
             else:
                 error = e.strerror
