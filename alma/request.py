@@ -27,6 +27,12 @@ class Request:
         self.body = value
         return self
 
+    def set_query_params(self, params):
+        if not params:
+            return
+        self.params = params
+        return self
+
     def get(self):
         res = requests.get(self.url, self.params, headers=self.headers)
         return self._process_response(res)
