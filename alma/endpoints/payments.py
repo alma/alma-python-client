@@ -1,7 +1,9 @@
+from functools import partial
 from typing import Union, List
 
 from . import Base
 from ..entities import Payment, Eligibility, Order
+from ..paginated_results import PaginatedResults
 
 
 class Payments(Base):
@@ -20,9 +22,22 @@ class Payments(Base):
         response = self.request(self.PAYMENTS_PATH).set_body(data).post()
         return Payment(response.json)
 
-    def fetch(self, payment_id):
-        response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}").get()
-        return Payment(response.json)
+    def fetch_all(self, limit=20, starting_after=None):
+        args = {"limit": limit}
+        if starting_after:
+            args["starting_after"] = starting_after
+
+        response = self.request(self.PAYMENTS_PATH).set_query_params(args).get()
+
+        next_page = partial(self.fetch_all, limit=limit)
+        return PaginatedResults(response.json, Payment, next_page)
+
+    def fetch(self, payment_id=None, limit=20):
+        if payment_id is None:
+            return self.fetch_all(limit)
+        else:
+            response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}").get()
+            return Payment(response.json)
 
     def flag_as_potential_fraud(self, payment_id, reason=None):
         request = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/potential-fraud")
