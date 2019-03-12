@@ -22,19 +22,23 @@ class Payments(Base):
         response = self.request(self.PAYMENTS_PATH).set_body(data).post()
         return Payment(response.json)
 
-    def fetch_all(self, limit=20, starting_after=None):
+    def fetch_all(
+        self, limit: int = 20, states: list = None, starting_after: str = None
+    ):
         args = {"limit": limit}
         if starting_after:
             args["starting_after"] = starting_after
+        if states:
+            args["state"] = ",".join(states)
 
         response = self.request(self.PAYMENTS_PATH).set_query_params(args).get()
 
-        next_page = partial(self.fetch_all, limit=limit)
+        next_page = partial(self.fetch_all, limit=limit, states=states)
         return PaginatedResults(response.json, Payment, next_page)
 
-    def fetch(self, payment_id=None, limit=20):
+    def fetch(self, payment_id=None, limit=20, states=None):
         if payment_id is None:
-            return self.fetch_all(limit)
+            return self.fetch_all(limit=limit, states=states)
         else:
             response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}").get()
             return Payment(response.json)
