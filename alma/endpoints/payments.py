@@ -83,3 +83,21 @@ class Payments(Base):
     def get_orders_for(self, payment_id) -> List[Order]:
         response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders").get()
         return [Order(o) for o in response.json]
+
+    def refund(self, payment_id, amount, full_refund=False) -> Payment:
+        """
+        Refunds given payment of the given amount (in cents). If `full_refund` is `True`, `amount` is ignored
+        to trigger a full refund of the payment, including potential customer fees.
+
+        :param payment_id: ID of the payment to refund
+        :param amount: Amount, in cents, to be refunded on the payment
+        :param full_refund: True if the full payment should be refunded (with customer fees). Default: false.
+        :return: Updated payment object
+        """
+        req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/refund")
+
+        if not full_refund:
+            req.set_body({"amount": amount})
+
+        response = req.post()
+        return Payment(response.json)
