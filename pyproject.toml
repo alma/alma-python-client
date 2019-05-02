@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 110
+skip-numeric-underscore-normalization = true
+py36 = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | tmp
+)/
+'''

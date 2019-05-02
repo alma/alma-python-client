@@ -5,12 +5,7 @@ from alma.entities import Base as BaseEntity
 
 
 class PaginatedResults(Sequence, Iterable):
-    def __init__(
-        self,
-        data: dict,
-        entity: Union[None, Type[BaseEntity]],
-        next_page: Union[None, Callable],
-    ):
+    def __init__(self, data: dict, entity: Union[None, Type[BaseEntity]], next_page: Union[None, Callable]):
         self._data = data
         self._entities = [entity(d) for d in data.get("data", [])]
         self._next_page = next_page
