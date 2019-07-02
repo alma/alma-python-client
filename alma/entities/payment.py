@@ -1,8 +1,6 @@
 from enum import Enum
 
-from . import Base
-from . import Installment
-from . import Order
+from . import Base, Installment, Order, Refund
 
 
 class PaymentState(Enum):
@@ -57,5 +55,8 @@ class Payment(Base):
 
         orders = data.pop("orders", [])
         self.orders = [Order(o) for o in orders]
+
+        refunds = data.pop("refunds", [])
+        self.refunds = [Refund(r) for r in refunds]
 
         super(Payment, self).__init__(data)
