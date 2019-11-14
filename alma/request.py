@@ -53,6 +53,8 @@ class Request:
         except requests.HTTPError as e:
             if response.is_json() and "message" in response.json:
                 error = response.json["message"]
+            elif response.is_json() and "error" in response.json:
+                error = response.json["error"]
             else:
                 error = e.strerror
 

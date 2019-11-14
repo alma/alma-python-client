@@ -104,3 +104,14 @@ class Payments(Base):
 
         response = req.post()
         return Payment(response.json)
+
+    def send_sms(self, payment_id: str):
+        """
+        Sends a payment link via SMS, to the customer's saved mobile phone number.
+
+        Will raise RequestError if the SMS API is not activated on your account or in case of any other error,
+        otherwise returns True.
+        """
+        self.request(f"{self.PAYMENTS_PATH}/{payment_id}/send-sms").post()
+
+        return True
