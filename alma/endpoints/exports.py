@@ -33,7 +33,7 @@ class Exports(Base):
         if end:
             data['end'] = int(end.timestamp())
 
-        response = self.request(self.PAYMENTS_PATH).set_body(data).post()
+        response = self.request(self.EXPORTS_PATH).set_body(data).post()
         return Export(response.json)
 
     def get_file(self, export_id: str = None, export_format: str = 'csv'):
