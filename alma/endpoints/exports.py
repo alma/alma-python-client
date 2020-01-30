@@ -1,12 +1,39 @@
 from functools import partial
+from datetime import datetime
 
 from . import Base
 from ..entities import Export
 from ..paginated_results import PaginatedResults
 
 
+EXPORT_TYPES = ['payments', 'accounting', 'accounting_for_payout']
+
+
+class ExportsException(Exception):
+    pass
+
+
 class Exports(Base):
     EXPORTS_PATH = "/v1/data-exports"
+
+    def create(self, export_type: str = None, payout_id: str = None,
+               start: datetime = None, end: datetime = None):
+        """ Create a new export"""
+        if export_type not in EXPORT_TYPES:
+            raise ExportsException("%s is not an availale type" % export_type)
+
+        data = dict(type=export_type)
+        if payout_id:
+            data['payout'] = payout_id
+
+        if start:
+            data['start'] = int(start.timestamp())
+
+        if end:
+            data['end'] = int(end.timestamp())
+
+        response = self.request(self.PAYMENTS_PATH).set_body(data).post()
+        return Export(response.json)
 
     def fetch_all(self, limit: int = 5, **filters):
         args = {"limit": limit}
