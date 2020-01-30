@@ -1,5 +1,6 @@
 from functools import partial
 from datetime import datetime
+from io import BytesIO
 
 from . import Base
 from ..entities import Export
@@ -34,6 +35,15 @@ class Exports(Base):
 
         response = self.request(self.PAYMENTS_PATH).set_body(data).post()
         return Export(response.json)
+
+    def get_file(self, export_id: str = None, export_format: str = 'csv'):
+        if export_id is None:
+            raise ExportsException('export_id is required')
+
+        request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
+        request.set_query_params(dict(format=export_format))
+        response = request.get()
+        return BytesIO(response.resp.text.encode())
 
     def fetch_all(self, limit: int = 5, **filters):
         args = {"limit": limit}
