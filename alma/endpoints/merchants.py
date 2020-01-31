@@ -1,5 +1,5 @@
-from . import Base
 from ..entities import Merchant
+from . import Base
 
 
 class Merchants(Base):
