@@ -21,7 +21,7 @@ class Exports(Base):
                start: datetime = None, end: datetime = None):
         """ Create a new export"""
         if export_type not in EXPORT_TYPES:
-            raise ExportsException("%s is not an availale type" % export_type)
+            raise ExportsException(f"{export_type} is not an available type")
 
         data = {"type": export_type}
         if payout_id:
