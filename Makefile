@@ -42,6 +42,9 @@ black: install-dev
 isort: install-dev
 	$(VENV)/bin/isort --recursive setup.py alma
 
+flake8: install-dev
+	$(VENV)/bin/flake8 setup.py alma
+
 build-requirements:
 	$(VIRTUALENV) $(TEMPDIR)
 	$(TEMPDIR)/bin/pip install -U pip
