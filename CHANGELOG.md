@@ -7,4 +7,3 @@
 - Handle the refund endpoint
 - Handle pagination for orders
 - Handle the send-sms API for payments.
-

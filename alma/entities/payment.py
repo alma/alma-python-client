@@ -1,6 +1,9 @@
 from enum import Enum
 
-from . import Base, Installment, Order, Refund
+from .base import Base
+from .installment import Installment
+from .order import Order
+from .refund import Refund
 
 
 class PaymentState(Enum):

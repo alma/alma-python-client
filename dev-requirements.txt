@@ -1,4 +1,10 @@
 black
-isort
-pytest
 flake8
+isort
+mypy
+pytest
+pytest-cache
+pytest-cov
+pytest-sugar
+pytest-xdist
+tox
