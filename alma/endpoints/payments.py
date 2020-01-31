@@ -51,7 +51,8 @@ class Payments(Base):
         Adds one or several orders to the given payment
 
         :param payment_id: ID of the payment to add the order(s) to
-        :param order_data: Either a dict of attributes for a single order, or a list of such dicts for several
+        :param order_data: Either a dict of attributes for a single order,
+                           or a list of such dicts for several
         :return: List of Order instances that were added to the payment
         """
         if type(order_data) is dict:
@@ -70,7 +71,8 @@ class Payments(Base):
         Sets one or several orders on the given payment (replacing existing ones)
 
         :param payment_id: ID of the payment to add the order(s) to
-        :param order_data: Either a dict of attributes for a single order, or a list of such dicts for several
+        :param order_data: Either a dict of attributes for a single order,
+                           or a list of such dicts for several
         :return: List of Order instances that were added to the payment
         """
         if type(order_data) is dict:
@@ -90,12 +92,14 @@ class Payments(Base):
 
     def refund(self, payment_id: str, amount: int, full_refund: bool = False, **params) -> Payment:
         """
-        Refunds given payment of the given amount (in cents). If `full_refund` is `True`, `amount` is ignored
+        Refunds given payment of the given amount (in cents).
+        If `full_refund` is `True`, `amount` is ignored
         to trigger a full refund of the payment, including potential customer fees.
 
         :param payment_id: ID of the payment to refund
         :param amount: Amount, in cents, to be refunded on the payment
-        :param full_refund: True if the full payment should be refunded (with customer fees). Default: false.
+        :param full_refund: True if the full payment should be refunded (with customer fees).
+                            Default: false.
         :return: Updated payment object
         """
         req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/refund")
@@ -113,8 +117,8 @@ class Payments(Base):
         """
         Sends a payment link via SMS, to the customer's saved mobile phone number.
 
-        Will raise RequestError if the SMS API is not activated on your account or in case of any other error,
-        otherwise returns True.
+        Will raise RequestError if the SMS API is not activated on your account or
+        in case of any other error, otherwise returns True.
         """
         self.request(f"{self.PAYMENTS_PATH}/{payment_id}/send-sms").post()
 

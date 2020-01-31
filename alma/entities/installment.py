@@ -18,7 +18,8 @@ class Installment(Base):
             try:
                 self.state = InstallmentState(state)
             except ValueError:
-                # Pass on unrecognized state values - they will be accessible as-is in the Installment data
+                # Pass on unrecognized state values
+                # they will be accessible as-is in the Installment data
                 pass
 
         super(Installment, self).__init__(data)

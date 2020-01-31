@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from . import endpoints, entities
 from .api_modes import ApiModes
 from .client import Client

@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from .base import Base
 from .eligibility import Eligibility
 from .installment import Installment, InstallmentState
