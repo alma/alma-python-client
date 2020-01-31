@@ -23,7 +23,7 @@ class Exports(Base):
         if export_type not in EXPORT_TYPES:
             raise ExportsException("%s is not an availale type" % export_type)
 
-        data = dict(type=export_type)
+        data = {"type": export_type}
         if payout_id:
             data['payout'] = payout_id
 
