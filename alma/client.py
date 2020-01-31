@@ -1,10 +1,10 @@
 import logging
 import platform
 
-from . import __version__ as alma_version
 from . import endpoints
 from .api_modes import ApiModes
 from .context import Context
+from .version import __version__ as alma_version
 
 
 class Client:

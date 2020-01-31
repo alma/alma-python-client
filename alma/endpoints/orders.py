@@ -13,10 +13,10 @@ class Orders(Base):
         return Order(response.json)
 
     def fetch_all(self, limit: int = 20, starting_after: str = None, **filters):
-        args = {"limit": limit}
+        args = {"limit": str(limit)}
 
         if starting_after:
-            args["starting_after"] = starting_after
+            args["starting_after"] = str(starting_after)
 
         if filters:
             for attribute, value in filters.items():

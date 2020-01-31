@@ -19,9 +19,9 @@ class Payments(Base):
         return Payment(response.json)
 
     def fetch_all(self, limit: int = 20, states: list = None, starting_after: str = None):
-        args = {"limit": limit}
+        args = {"limit": str(limit)}
         if starting_after:
-            args["starting_after"] = starting_after
+            args["starting_after"] = str(starting_after)
         if states:
             args["state"] = ",".join(states)
 
@@ -55,7 +55,7 @@ class Payments(Base):
                            or a list of such dicts for several
         :return: List of Order instances that were added to the payment
         """
-        if type(order_data) is dict:
+        if isinstance(order_data, dict):
             order_data = [order_data]
 
         response = (
@@ -75,7 +75,7 @@ class Payments(Base):
                            or a list of such dicts for several
         :return: List of Order instances that were added to the payment
         """
-        if type(order_data) is dict:
+        if isinstance(order_data, dict):
             order_data = [order_data]
 
         response = (
