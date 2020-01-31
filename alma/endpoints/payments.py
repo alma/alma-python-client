@@ -21,7 +21,7 @@ class Payments(Base):
     def fetch_all(self, limit: int = 20, states: list = None, starting_after: str = None):
         args = {"limit": str(limit)}
         if starting_after:
-            args["starting_after"] = str(starting_after)
+            args["starting_after"] = starting_after
         if states:
             args["state"] = ",".join(states)
 

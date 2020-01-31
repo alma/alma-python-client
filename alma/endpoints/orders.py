@@ -16,7 +16,7 @@ class Orders(Base):
         args = {"limit": str(limit)}
 
         if starting_after:
-            args["starting_after"] = str(starting_after)
+            args["starting_after"] = starting_after
 
         if filters:
             for attribute, value in filters.items():
