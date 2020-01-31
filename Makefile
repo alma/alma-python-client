@@ -40,7 +40,7 @@ black: install-dev
 	$(VENV)/bin/black setup.py alma
 
 isort: install-dev
-	$(VENV)/bin/isort setup.py alma
+	$(VENV)/bin/isort --recursive setup.py alma
 
 build-requirements:
 	$(VIRTUALENV) $(TEMPDIR)

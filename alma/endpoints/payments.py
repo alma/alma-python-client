@@ -1,9 +1,9 @@
 from functools import partial
-from typing import Union, List
+from typing import List, Union
 
-from . import Base
-from ..entities import Payment, Eligibility, Order
+from ..entities import Eligibility, Order, Payment
 from ..paginated_results import PaginatedResults
+from . import Base
 
 
 class Payments(Base):

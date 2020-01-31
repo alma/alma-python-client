@@ -1,8 +1,8 @@
 from functools import partial
 
-from . import Base
 from ..entities import Order
 from ..paginated_results import PaginatedResults
+from . import Base
 
 
 class Orders(Base):
