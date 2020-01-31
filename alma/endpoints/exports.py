@@ -7,18 +7,12 @@ from ..entities import Export, ExportType, ExportFormat
 from ..paginated_results import PaginatedResults
 
 
-class ExportsException(Exception):
-    pass
-
-
 class Exports(Base):
     EXPORTS_PATH = "/v1/data-exports"
 
-    def create(self, export_type: ExportType = None, payout_id: str = None,
+    def create(self, export_type: ExportType, payout_id: str = None,
                start: datetime = None, end: datetime = None):
         """ Create a new export"""
-        # check_is_an_available_entry(export_type, ExportType)
-
         data = {"type": export_type.value}
         if payout_id:
             data['payout'] = payout_id
@@ -32,11 +26,7 @@ class Exports(Base):
         response = self.request(self.EXPORTS_PATH).set_body(data).post()
         return Export(response.json)
 
-    def get_file(self, export_id: str = None, export_format: ExportFormat = None):
-        # check_is_an_available_entry(export_format, ExportFormat)
-        if export_id is None:
-            raise ExportsException('export_id is required')
-
+    def get_file(self, export_id: str, export_format: ExportFormat = None):
         request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
         if export_format:
             request.set_query_params({"format": export_format.value})
