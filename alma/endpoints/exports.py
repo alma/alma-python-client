@@ -43,7 +43,7 @@ class Exports(Base):
         request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
         request.set_query_params(dict(format=export_format))
         response = request.get()
-        return BytesIO(response.resp.text.encode())
+        return BytesIO(response.resp.content)
 
     def fetch_all(self, limit: int = 5, **filters):
         args = {"limit": limit}
