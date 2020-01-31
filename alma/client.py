@@ -23,7 +23,10 @@ class Client:
         }
 
         if type(options["api_root"]) is str:
-            options["api_root"] = {ApiModes.TEST: options["api_root"], ApiModes.LIVE: options["api_root"]}
+            options["api_root"] = {
+                ApiModes.TEST: options["api_root"],
+                ApiModes.LIVE: options["api_root"],
+            }
         elif type(options["api_root"]) is not dict:
             raise TypeError("`api_root` option must be a dict or a string")
 

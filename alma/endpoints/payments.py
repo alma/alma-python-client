@@ -58,7 +58,9 @@ class Payments(Base):
             order_data = [order_data]
 
         response = (
-            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders").set_body({"orders": order_data}).put()
+            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders")
+            .set_body({"orders": order_data})
+            .put()
         )
 
         return [Order(o) for o in response.json]
@@ -75,7 +77,9 @@ class Payments(Base):
             order_data = [order_data]
 
         response = (
-            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders").set_body({"orders": order_data}).post()
+            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders")
+            .set_body({"orders": order_data})
+            .post()
         )
 
         return [Order(o) for o in response.json]
