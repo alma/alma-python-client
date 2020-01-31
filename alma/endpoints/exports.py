@@ -3,11 +3,8 @@ from datetime import datetime
 from io import BytesIO
 
 from . import Base
-from ..entities import Export
+from ..entities import Export, ExportType, ExportFormat
 from ..paginated_results import PaginatedResults
-
-
-EXPORT_TYPES = ['payments', 'accounting', 'accounting_for_payout']
 
 
 class ExportsException(Exception):
@@ -17,13 +14,12 @@ class ExportsException(Exception):
 class Exports(Base):
     EXPORTS_PATH = "/v1/data-exports"
 
-    def create(self, export_type: str = None, payout_id: str = None,
+    def create(self, export_type: ExportType = None, payout_id: str = None,
                start: datetime = None, end: datetime = None):
         """ Create a new export"""
-        if export_type not in EXPORT_TYPES:
-            raise ExportsException(f"{export_type} is not an available type")
+        # check_is_an_available_entry(export_type, ExportType)
 
-        data = {"type": export_type}
+        data = {"type": export_type.value}
         if payout_id:
             data['payout'] = payout_id
 
@@ -36,12 +32,15 @@ class Exports(Base):
         response = self.request(self.EXPORTS_PATH).set_body(data).post()
         return Export(response.json)
 
-    def get_file(self, export_id: str = None, export_format: str = 'csv'):
+    def get_file(self, export_id: str = None, export_format: ExportFormat = None):
+        # check_is_an_available_entry(export_format, ExportFormat)
         if export_id is None:
             raise ExportsException('export_id is required')
 
         request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
-        request.set_query_params(dict(format=export_format))
+        if export_format:
+            request.set_query_params({"format": export_format.value})
+
         response = request.get()
         return BytesIO(response.resp.content)
 
