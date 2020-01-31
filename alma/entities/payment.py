@@ -27,8 +27,8 @@ class PaymentState(Enum):
     LATE_DUNNING = "late_dunning"
     # Next installment is very late, between 8 and 15 days. Contacting customer with email and SMS
     LATE_CONTACT_CUSTOMER = "late_contact_customer"
-    # More than 15 days late, payment is considered in default: (i) claim is opened and (ii) payments
-    # switches to judiciary collection
+    # More than 15 days late, payment is considered in default:
+    # (i) claim is opened and (ii) payments switches to judiciary collection
     DEFAULT = "default"
     # After default, we may recover part of the payment through judiciary collection.
     # Once collection has been completed, this stage is reached and nothing happens anymore
@@ -50,7 +50,8 @@ class Payment(Base):
             try:
                 self.state = PaymentState(state)
             except ValueError:
-                # Pass on unrecognized state values - they will be accessible as-is in the Payment data
+                # Pass on unrecognized state values
+                # they will be accessible as-is in the Payment data
                 pass
 
         orders = data.pop("orders", [])

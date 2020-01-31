@@ -1,5 +1,5 @@
 [tool.black]
-line-length = 110
+line-length = 99
 skip-numeric-underscore-normalization = true
 include = '\.pyi?$'
 exclude = '''
