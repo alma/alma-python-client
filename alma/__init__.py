@@ -1,9 +1,5 @@
-# flake8: noqa
-
-import pkg_resources
-
-from . import endpoints, entities
 from .api_modes import ApiModes
 from .client import Client
+from .version import __version__
 
-__version__ = pkg_resources.get_distribution(__package__).version
+__all__ = ["Client", "ApiModes", "__version__"]

@@ -40,10 +40,13 @@ black: install-dev
 	$(VENV)/bin/black setup.py alma
 
 isort: install-dev
-	$(VENV)/bin/isort --recursive setup.py alma
+	$(VENV)/bin/isort --recursive setup.py alma tests
 
 flake8: install-dev
-	$(VENV)/bin/flake8 setup.py alma
+	$(VENV)/bin/flake8 setup.py alma tests
+
+mypy: install-dev
+	$(VENV)/bin/mypy --ignore-missing-imports --scripts-are-modules alma
 
 build-requirements:
 	$(VIRTUALENV) $(TEMPDIR)

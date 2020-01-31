@@ -1,13 +1,11 @@
-from collections.abc import Iterable, Sequence
-from typing import Callable, Type, Union
+from collections.abc import Iterable
+from typing import Callable, Type
 
 from alma.entities import Base as BaseEntity
 
 
-class PaginatedResults(Sequence, Iterable):
-    def __init__(
-        self, data: dict, entity: Union[None, Type[BaseEntity]], next_page: Union[None, Callable]
-    ):
+class PaginatedResults(Iterable):
+    def __init__(self, data: dict, entity: Type[BaseEntity], next_page: Callable):
         self._data = data
         self._entities = [entity(d) for d in data.get("data", [])]
         self._next_page = next_page
