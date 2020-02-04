@@ -38,7 +38,7 @@ class Exports(Base):
         args = {"limit": limit}
 
         if filters:
-            for attribute, value in filters.items():
+            args.update(filters)
                 args[attribute] = value
 
         response = self.request(self.EXPORTS_PATH).set_query_params(args).get()
