@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 import pytest
+
 from alma import Client
 
 

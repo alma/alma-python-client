@@ -1,27 +1,32 @@
-from functools import partial
 from datetime import datetime
+from functools import partial
 from io import BytesIO
 
-from . import Base
-from ..entities import Export, ExportType, ExportFormat
+from ..entities import Export, ExportFormat, ExportType
 from ..paginated_results import PaginatedResults
+from . import Base
 
 
 class Exports(Base):
     EXPORTS_PATH = "/v1/data-exports"
 
-    def create(self, export_type: ExportType, payout_id: str = None,
-               start: datetime = None, end: datetime = None):
+    def create(
+        self,
+        export_type: ExportType,
+        payout_id: str = None,
+        start: datetime = None,
+        end: datetime = None,
+    ):
         """ Create a new export"""
         data = {"type": export_type.value}
         if payout_id:
-            data['payout'] = payout_id
+            data["payout"] = payout_id
 
         if start:
-            data['start'] = int(start.timestamp())
+            data["start"] = int(start.timestamp())
 
         if end:
-            data['end'] = int(end.timestamp())
+            data["end"] = int(end.timestamp())
 
         response = self.request(self.EXPORTS_PATH).set_body(data).post()
         return Export(response.json)
