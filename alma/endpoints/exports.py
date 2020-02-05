@@ -35,14 +35,8 @@ class Exports(Base):
         return BytesIO(response.resp.content)
 
     def fetch_all(self, limit: int = 5, **filters):
-        args = {"limit": limit}
-
-        if filters:
-            args.update(filters)
-                args[attribute] = value
-
+        args = {"limit": limit, **filters}
         response = self.request(self.EXPORTS_PATH).set_query_params(args).get()
-
         next_page = partial(self.fetch_all, limit=limit, **filters)
         return PaginatedResults(response.json, Export, next_page)
 
