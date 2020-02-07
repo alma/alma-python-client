@@ -65,3 +65,7 @@ class Client:
     @property
     def orders(self) -> endpoints.Orders:
         return self._endpoint("Orders")
+
+    @property
+    def exports(self) -> endpoints.Exports:
+        return self._endpoint("Exports")
