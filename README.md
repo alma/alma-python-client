@@ -4,6 +4,11 @@
 
 Python API Client for the Alma API
 
+## Install
+
+```bash
+pip install alma-client
+```
 
 ## Demo
 
