@@ -15,19 +15,19 @@ alma_client = Client(api_key="sk_test..")
 payments = alma_client.payments.fetch_all()
 
 for p in payments:
-	print(f"{p.id}: Payment en {len(p.payment_plan)} fois")
+    print(f"{p.id}: Paiement en {p.installments_count)} fois")
 
 
 payment_data = {
-	"purchase_amount": 10000,
-	"return_url": "http://merchant.com/payment-success",
-	"shipping_address": {
-	    "first_name": "Martin",
-		"last_name": "Dupond",
-		"line1": "1 rue de Rivoli",
-		"postal_code": "75004",
-		"city": "Paris"
-	}
+    "purchase_amount": 10000,
+    "return_url": "http://merchant.com/payment-success",
+    "shipping_address": {
+        "first_name": "Martin",
+        "last_name": "Dupond",
+        "line1": "1 rue de Rivoli",
+        "postal_code": "75004",
+        "city": "Paris"
+    }
 }
 
 eligibility = alma_client.payments.eligibility(payment_data)
