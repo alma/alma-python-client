@@ -1,9 +1,9 @@
 # Changelog
 
-1.0.1 (unreleased)
+1.0.1 (2020-03-24)
 ------------------
 
-- Nothing changed yet.
+- Automatically detects the API mode from the api_key.
 
 
 1.0.0 (2020-03-24)
