@@ -1,6 +1,6 @@
 # alma-python-client
 
-[![Travis Build Status](https://travis-ci.org/alma/alma-python-client.svg?branch=master)](https://travis-ci.org/alma/alma-python-client)
+[![Travis Build Status](https://travis-ci.org/alma/alma-python-client.svg?branch=master)](https://travis-ci.org/alma/alma-python-client) [![PyPI](https://img.shields.io/pypi/v/alma-client.svg)](https://pypi.python.org/pypi/alma-client)
 
 Python API Client for the Alma API
 
