@@ -20,7 +20,7 @@ alma_client = Client(api_key="sk_test..")
 payments = alma_client.payments.fetch_all()
 
 for p in payments:
-    print(f"{p.id}: Paiement en {p.installments_count)} fois")
+    print(f"{p.id}: Paiement en {len(p.payment_plan)} fois")
 
 
 payment_data = {
