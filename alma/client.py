@@ -17,7 +17,7 @@ class Client:
 
         options = {
             "api_root": {ApiModes.TEST: self.SANDBOX_API_URL, ApiModes.LIVE: self.LIVE_API_URL},
-            "mode": ApiModes.LIVE,
+            "mode": ApiModes.LIVE if api_key.startswith("sk_live") else ApiModes.TEST,
             "logger": logging.getLogger("alma-python-client"),
             **options,
         }
