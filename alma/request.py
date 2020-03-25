@@ -17,7 +17,9 @@ class Request:
 
         self.headers = {
             "User-Agent": self.context.user_agent_string(),
-            "Authorization": f"Alma-Auth {self.context.api_key}",
+            "Authorization": "Alma-Auth {context_api_key}".format(
+                context_api_key=self.context.api_key
+            ),
             "Accept": "application/json",
         }
         self.params = {}

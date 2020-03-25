@@ -9,7 +9,13 @@ class Orders(Base):
     ORDERS_PATH = "/v1/orders"
 
     def update(self, order_id, data):
-        response = self.request(f"{self.ORDERS_PATH}/{order_id}").set_body(data).put()
+        response = (
+            self.request(
+                "{ORDERS_PATH}/{order_id}".format(ORDERS_PATH=self.ORDERS_PATH, order_id=order_id)
+            )
+            .set_body(data)
+            .put()
+        )
         return Order(response.json)
 
     def fetch_all(self, limit: int = 20, starting_after: str = None, **filters):
@@ -31,5 +37,7 @@ class Orders(Base):
         if order_id is None:
             return self.fetch_all(limit=limit, **filters)
         else:
-            response = self.request(f"{self.ORDERS_PATH}/{order_id}").get()
+            response = self.request(
+                "{ORDERS_PATH}/{order_id}".format(ORDERS_PATH=self.ORDERS_PATH, order_id=order_id)
+            ).get()
             return Order(response.json)

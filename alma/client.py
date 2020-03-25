@@ -31,7 +31,11 @@ class Client:
             raise TypeError("`api_root` option must be a dict or a string")
 
         if options["mode"] not in (ApiModes.LIVE, ApiModes.TEST):
-            raise ValueError(f"`mode` option must be one of ({ApiModes.LIVE}, {ApiModes.TEST})")
+            raise ValueError(
+                "`mode` option must be one of ({LIVE}, {TEST})".format(
+                    LIVE=ApiModes.LIVE, TEST=ApiModes.TEST
+                )
+            )
 
         self.context = Context(api_key, options)
 
