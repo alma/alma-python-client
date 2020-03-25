@@ -10,7 +10,11 @@ class Payments(Base):
     PAYMENTS_PATH = "/v1/payments"
 
     def eligibility(self, order_data):
-        response = self.request(f"{self.PAYMENTS_PATH}/eligibility").set_body(order_data).post()
+        response = (
+            self.request("{PAYMENTS_PATH}/eligibility".format(PAYMENTS_PATH=self.PAYMENTS_PATH))
+            .set_body(order_data)
+            .post()
+        )
 
         return Eligibility(response.json)
 
@@ -34,11 +38,19 @@ class Payments(Base):
         if payment_id is None:
             return self.fetch_all(limit=limit, states=states)
         else:
-            response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}").get()
+            response = self.request(
+                "{PAYMENTS_PATH}/{payment_id}".format(
+                    PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+                )
+            ).get()
             return Payment(response.json)
 
     def flag_as_potential_fraud(self, payment_id, reason=None):
-        request = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/potential-fraud")
+        request = self.request(
+            "{PAYMENTS_PATH}/{payment_id}/potential-fraud".format(
+                PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+            )
+        )
 
         if reason:
             request.set_body({"reason": reason})
@@ -59,7 +71,11 @@ class Payments(Base):
             order_data = [order_data]
 
         response = (
-            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders")
+            self.request(
+                "{PAYMENTS_PATH}/{payment_id}/orders".format(
+                    PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+                )
+            )
             .set_body({"orders": order_data})
             .put()
         )
@@ -79,7 +95,11 @@ class Payments(Base):
             order_data = [order_data]
 
         response = (
-            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders")
+            self.request(
+                "{PAYMENTS_PATH}/{payment_id}/orders".format(
+                    PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+                )
+            )
             .set_body({"orders": order_data})
             .post()
         )
@@ -87,7 +107,11 @@ class Payments(Base):
         return [Order(o) for o in response.json]
 
     def get_orders_for(self, payment_id) -> List[Order]:
-        response = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders").get()
+        response = self.request(
+            "{PAYMENTS_PATH}/{payment_id}/orders".format(
+                PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+            )
+        ).get()
         return [Order(o) for o in response.json]
 
     def refund(self, payment_id: str, amount: int, full_refund: bool = False, **params) -> Payment:
@@ -102,7 +126,11 @@ class Payments(Base):
                             Default: false.
         :return: Updated payment object
         """
-        req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/refund")
+        req = self.request(
+            "{PAYMENTS_PATH}/{payment_id}/refund".format(
+                PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+            )
+        )
 
         refund_params = {}
         if not full_refund:
@@ -120,6 +148,10 @@ class Payments(Base):
         Will raise RequestError if the SMS API is not activated on your account or
         in case of any other error, otherwise returns True.
         """
-        self.request(f"{self.PAYMENTS_PATH}/{payment_id}/send-sms").post()
+        self.request(
+            "{PAYMENTS_PATH}/{payment_id}/send-sms".format(
+                PAYMENTS_PATH=self.PAYMENTS_PATH, payment_id=payment_id
+            )
+        ).post()
 
         return True

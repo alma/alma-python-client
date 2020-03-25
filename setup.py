@@ -14,7 +14,7 @@ setup(
     name="alma-client",
     version="1.0.2.dev0",
     description="Python API client for the Alma Installments API",
-    long_description=f"{README}\n\n{CHANGELOG}",
+    long_description="{README}\n\n{CHANGELOG}".format(README=README, CHANGELOG=CHANGELOG),
     long_description_content_type="text/markdown",
     url="https://github.com/alma/alma-python-client",
     author="Alma",
