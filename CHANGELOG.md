@@ -1,9 +1,9 @@
 # Changelog
 
-1.0.2 (unreleased)
+1.1.0 (2020-03-25)
 ------------------
 
-- Nothing changed yet.
+- Add support for Python 3.5+
 
 
 1.0.1 (2020-03-24)
