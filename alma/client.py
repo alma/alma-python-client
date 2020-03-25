@@ -28,12 +28,12 @@ class Client:
                 ApiModes.LIVE: options["api_root"],
             }
         elif type(options["api_root"]) is not dict:
-            raise TypeError("`api_root` option must be a dict or a string")
+            raise ValueError("`api_root` option must be a dict or a string")
 
         if options["mode"] not in (ApiModes.LIVE, ApiModes.TEST):
             raise ValueError(
                 "`mode` option must be one of ({LIVE}, {TEST})".format(
-                    LIVE=ApiModes.LIVE, TEST=ApiModes.TEST
+                    LIVE=ApiModes.LIVE.value, TEST=ApiModes.TEST.value
                 )
             )
 
@@ -47,7 +47,7 @@ class Client:
 
     def init_user_agent(self):
         self.add_user_agent_component("Python", platform.python_version())
-        self.add_user_agent_component("Alma for Python", alma_version)
+        self.add_user_agent_component("alma-client", alma_version)
 
     def _endpoint(self, endpoint_name):
         endpoint = self._endpoints.get(endpoint_name)
