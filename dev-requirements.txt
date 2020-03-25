@@ -2,9 +2,3 @@ black
 flake8
 isort
 mypy
-pytest<5.4
-pytest-cache
-pytest-cov
-pytest-sugar
-pytest-xdist
-tox
