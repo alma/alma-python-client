@@ -1,5 +1,11 @@
 # Changelog
 
+1.2.0 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 1.1.0 (2020-03-25)
 ------------------
 
