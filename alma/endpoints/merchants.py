@@ -28,3 +28,7 @@ class Merchants(Base):
             .get()
             .expect(lambda resp: [FeePlan(fp) for fp in resp.json])
         )
+
+    def fetch(self, merchant_id):
+        response = self.request(f"{self.MERCHANTS_PATH}/{merchant_id}").get()
+        return Merchant(response.json)
