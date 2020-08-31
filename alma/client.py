@@ -16,17 +16,17 @@ class Client:
     @classmethod
     def with_api_key(cls, api_key: str, **options):
         options = {**options, "credentials": ApiKeyCredentials(api_key)}
-        return cls(None, **options)
+        return cls(**options)
 
     @classmethod
     def with_merchant_id(cls, merchant_id: str, **options):
         options = {**options, "credentials": MerchantIdCredentials(merchant_id)}
-        return cls(None, **options)
+        return cls(**options)
 
     @classmethod
     def with_alma_session(cls, session_id: str, cookie_name: str = "alma_sess", **options):
         options = {**options, "credentials": AlmaSessionCredentials(session_id, cookie_name)}
-        return cls(None, **options)
+        return cls(**options)
 
     def __init__(self, api_key: Optional[str] = None, **kwargs):
         """
@@ -97,7 +97,9 @@ class Client:
         self.context = Context(options)
 
         self.init_user_agent()
-        self._endpoints = {}  # : Dict[str, endpoints.Base]
+
+        # type: Dict[str, endpoints.Base]
+        self._endpoints = {}
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
