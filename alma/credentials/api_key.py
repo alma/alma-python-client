@@ -6,7 +6,4 @@ class ApiKeyCredentials(Credentials):
         self.api_key = api_key
 
     def configure(self, request):
-        request.headers = {
-            **request.headers,
-            "Authorization": "Alma-Auth {api_key}".format(api_key=self.api_key),
-        }
+        request.headers["Authorization"] = "Alma-Auth {api_key}".format(api_key=self.api_key)

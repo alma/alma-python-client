@@ -6,9 +6,6 @@ class MerchantIdCredentials(Credentials):
         self.merchant_id = merchant_id
 
     def configure(self, request):
-        request.headers = {
-            **request.headers,
-            "Authorization": "Alma-Merchant-Auth {merchant_id}".format(
-                merchant_id=self.merchant_id
-            ),
-        }
+        request.headers["Authorization"] = "Alma-Merchant-Auth {merchant_id}".format(
+            merchant_id=self.merchant_id
+        )

@@ -7,4 +7,4 @@ class AlmaSessionCredentials(Credentials):
         self.cookie_name = cookie_name
 
     def configure(self, request):
-        request.cookies = {**request.cookies, self.cookie_name: self.session_id}
+        request.cookies[self.cookie_name] = self.session_id
