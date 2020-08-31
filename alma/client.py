@@ -40,17 +40,19 @@ class Client:
         :param  api_key:    Deprecated - use Client.with_api_key("<api_key>") instead
         :type   api_key:    str
 
-        :keyword    credentials A `Credentials` instance to be used to configure requests made to the API
-                                This would typically be set by one of the convenience methods mentioned above
+        :keyword    credentials A `Credentials` instance to be used to configure requests made to
+                                the API. This would typically be set by one of the convenience
+                                methods mentioned above.
         :keyword    mode        API mode to be used: either ApiModes.LIVE or ApiModes.TEST
         :keyword    logger      A logger instance to be used instead of the default one
-        :keyword    api_root    root URL(s) to call Alma's API at. You probably don't want to change it!
+        :keyword    api_root    root URL(s) to call Alma's API at.
+                                You probably don't want to change it!
 
                                 Expected types:
                                 -------------
                                 str: the provided URL will be used for both LIVE and TEST modes
-                                dict: must have two keys, ApiModes.LIVE and ApiModes.TEST, each value must be
-                                      the URL to be used for each mode
+                                dict: must have two keys, ApiModes.LIVE and ApiModes.TEST, each
+                                      value must be the URL to be used for each mode
 
         """
         default_mode = ApiModes.LIVE
