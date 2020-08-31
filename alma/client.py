@@ -97,7 +97,7 @@ class Client:
         self.context = Context(options)
 
         self.init_user_agent()
-        self._endpoints: Dict[str, endpoints.Base] = {}
+        self._endpoints = {}  # : Dict[str, endpoints.Base]
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
