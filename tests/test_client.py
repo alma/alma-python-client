@@ -10,14 +10,6 @@ from alma.version import __version__ as alma_version
 
 
 class ClientTest(TestCase):
-    def test_client_exposes_api_key_credentials_convenience_method(self):
-        assert Client.with_api_key
-
-    def test_client_exposes_merchant_id_credentials_convenience_method(self):
-        assert Client.with_merchant_id
-
-    def test_client_exposes_alma_session_credentials_convenience_method(self):
-        assert Client.with_alma_session
 
     def test_client_raises_with_no_api_key_arguments_nor_credentials(self):
         with pytest.raises(ValueError, match=r"Valid credentials are required"):
