@@ -1,6 +1,20 @@
+from functools import wraps
+
 import requests
 
 from .response import Response
+
+
+def configure_credentials(func):
+    def decorator(f):
+        @wraps(f)
+        def decorated(request, *args, **kwargs):
+            request.context.credentials.configure(request)
+            return f(request, *args, **kwargs)
+
+        return decorated
+
+    return decorator(func)
 
 
 class RequestError(Exception):
@@ -17,11 +31,9 @@ class Request:
 
         self.headers = {
             "User-Agent": self.context.user_agent_string(),
-            "Authorization": "Alma-Auth {context_api_key}".format(
-                context_api_key=self.context.api_key
-            ),
             "Accept": "application/json",
         }
+        self.cookies = {}
         self.params = {}
         self.body = None
 
@@ -35,16 +47,19 @@ class Request:
         self.params = params
         return self
 
+    @configure_credentials
     def get(self):
-        res = requests.get(self.url, self.params, headers=self.headers)
+        res = requests.get(self.url, self.params, headers=self.headers, cookies=self.cookies)
         return self._process_response(res)
 
+    @configure_credentials
     def post(self):
-        res = requests.post(self.url, json=self.body, headers=self.headers)
+        res = requests.post(self.url, json=self.body, headers=self.headers, cookies=self.cookies)
         return self._process_response(res)
 
+    @configure_credentials
     def put(self):
-        res = requests.put(self.url, json=self.body, headers=self.headers)
+        res = requests.put(self.url, json=self.body, headers=self.headers, cookies=self.cookies)
         return self._process_response(res)
 
     def _process_response(self, resp):
