@@ -5,7 +5,12 @@ from typing import Optional
 from . import endpoints
 from .api_modes import ApiModes
 from .context import Context
-from .credentials import MerchantIdCredentials, AlmaSessionCredentials, ApiKeyCredentials
+from .credentials import (
+    MerchantIdCredentials,
+    AlmaSessionCredentials,
+    ApiKeyCredentials,
+    Credentials,
+)
 from .version import __version__ as alma_version
 
 
@@ -15,20 +20,29 @@ class Client:
 
     @classmethod
     def with_api_key(cls, api_key: str, **options):
-        options = {**options, "credentials": ApiKeyCredentials(api_key)}
-        return cls(**options)
+        return cls(credentials=ApiKeyCredentials(api_key), **options)
 
     @classmethod
-    def with_merchant_id(cls, merchant_id: str, **options):
-        options = {**options, "credentials": MerchantIdCredentials(merchant_id)}
-        return cls(**options)
+    def with_merchant_id(cls, merchant_id: str, mode: ApiModes = ApiModes.LIVE, **options):
+        return cls(credentials=MerchantIdCredentials(mode, merchant_id), **options)
 
     @classmethod
-    def with_alma_session(cls, session_id: str, cookie_name: str = "alma_sess", **options):
-        options = {**options, "credentials": AlmaSessionCredentials(session_id, cookie_name)}
-        return cls(**options)
+    def with_alma_session(
+        cls,
+        session_id: str,
+        cookie_name: str = "alma_sess",
+        mode: ApiModes = ApiModes.LIVE,
+        **options
+    ):
+        return cls(credentials=AlmaSessionCredentials(mode, session_id, cookie_name), **options)
 
-    def __init__(self, api_key: Optional[str] = None, **kwargs):
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        credentials: Optional[Credentials] = None,
+        mode: Optional[ApiModes] = None,
+        **kwargs
+    ):
         """
         Create a new instance of the Alma API Client.
 
@@ -40,10 +54,15 @@ class Client:
         :param  api_key:    Deprecated - use Client.with_api_key("<api_key>") instead
         :type   api_key:    str
 
-        :keyword    credentials A `Credentials` instance to be used to configure requests made to
+        :param      credentials   A `Credentials` instance to be used to configure requests made to
                                 the API. This would typically be set by one of the convenience
                                 methods mentioned above.
-        :keyword    mode        API mode to be used: either ApiModes.LIVE or ApiModes.TEST
+        :type       credentials Credentials
+
+        :param      mode        Deprecated. Use `mode` param of convenience methods above
+                                API mode to be used: either ApiModes.LIVE or ApiModes.TEST
+        :type       mode        ApiModes
+
         :keyword    logger      A logger instance to be used instead of the default one
         :keyword    api_root    root URL(s) to call Alma's API at.
                                 You probably don't want to change it!
@@ -55,25 +74,19 @@ class Client:
                                       value must be the URL to be used for each mode
 
         """
-        default_mode = ApiModes.LIVE
-        credentials = kwargs.get("credentials")
-
         if isinstance(credentials, ApiKeyCredentials):
             api_key = credentials.api_key
 
-        if api_key:
-            default_mode = ApiModes.LIVE if api_key.startswith("sk_live") else ApiModes.TEST
+        if not credentials:
+            if not api_key:
+                raise ValueError("Valid credentials are required to instantiate a new Client")
 
             # Backward compatibility with the older init method
-            if not credentials:
-                credentials = ApiKeyCredentials(api_key)
-
-        if not credentials:
-            raise ValueError("Valid credentials are required to instantiate a new Client")
+            credentials = ApiKeyCredentials(api_key)
 
         options = {
             "api_root": {ApiModes.TEST: self.SANDBOX_API_URL, ApiModes.LIVE: self.LIVE_API_URL},
-            "mode": default_mode,
+            "mode": mode if mode is not None else credentials.mode,
             "logger": logging.getLogger("alma-python-client"),
             "credentials": credentials,
             **kwargs,
@@ -95,9 +108,7 @@ class Client:
             )
 
         self.context = Context(options)
-
         self.init_user_agent()
-
         self._endpoints = {}  # type: ignore
 
     def add_user_agent_component(self, component, version):
