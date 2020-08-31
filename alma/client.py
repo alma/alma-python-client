@@ -1,6 +1,6 @@
 import logging
 import platform
-from typing import Optional, Dict
+from typing import Optional
 
 from . import endpoints
 from .api_modes import ApiModes
@@ -98,8 +98,7 @@ class Client:
 
         self.init_user_agent()
 
-        # type: Dict[str, endpoints.Base]
-        self._endpoints = {}
+        self._endpoints = {}  # type: ignore
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
