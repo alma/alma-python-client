@@ -1,5 +1,5 @@
-from . import Credentials
 from .. import ApiModes
+from .base import Credentials
 
 
 class ApiKeyCredentials(Credentials):
