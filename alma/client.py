@@ -6,10 +6,10 @@ from . import endpoints
 from .api_modes import ApiModes
 from .context import Context
 from .credentials import (
-    MerchantIdCredentials,
     AlmaSessionCredentials,
     ApiKeyCredentials,
     Credentials,
+    MerchantIdCredentials,
 )
 from .version import __version__ as alma_version
 

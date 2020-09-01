@@ -2,7 +2,6 @@ import platform
 from unittest import TestCase
 
 from alma import Client
-
 from alma.version import __version__ as alma_version
 
 

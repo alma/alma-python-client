@@ -1,8 +1,9 @@
-import pytest
 from unittest import TestCase
 
+import pytest
+
 from alma import ApiModes, Client
-from alma.credentials import ApiKeyCredentials, MerchantIdCredentials, AlmaSessionCredentials
+from alma.credentials import AlmaSessionCredentials, ApiKeyCredentials, MerchantIdCredentials
 
 
 class ClientTest(TestCase):
@@ -47,7 +48,7 @@ class ClientTest(TestCase):
         assert isinstance(alma_client.context.credentials, MerchantIdCredentials)
         assert alma_client.context.credentials.merchant_id == merchant_id
 
-    def test_client_inits_merchant_id_credentials(self):
+    def test_client_inits_with_cookies_credentials(self):
         session_id = "merchant"
         cookie_name = "session_cookie"
         alma_client = Client.with_alma_session(session_id=session_id, cookie_name=cookie_name)
