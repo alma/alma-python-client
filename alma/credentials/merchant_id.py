@@ -1,5 +1,5 @@
 from .. import ApiModes
-from . import Credentials
+from .base import Credentials
 
 
 class MerchantIdCredentials(Credentials):
