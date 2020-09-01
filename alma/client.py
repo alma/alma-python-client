@@ -1,9 +1,16 @@
 import logging
 import platform
+from typing import Optional
 
 from . import endpoints
 from .api_modes import ApiModes
 from .context import Context
+from .credentials import (
+    MerchantIdCredentials,
+    AlmaSessionCredentials,
+    ApiKeyCredentials,
+    Credentials,
+)
 from .version import __version__ as alma_version
 
 
@@ -11,15 +18,78 @@ class Client:
     SANDBOX_API_URL = "https://api.sandbox.getalma.eu"
     LIVE_API_URL = "https://api.getalma.eu"
 
-    def __init__(self, api_key, **options):
-        if not api_key:
-            raise ValueError("An API key is required to instantiate a new Client")
+    @classmethod
+    def with_api_key(cls, api_key: str, **options):
+        return cls(credentials=ApiKeyCredentials(api_key), **options)
+
+    @classmethod
+    def with_merchant_id(cls, merchant_id: str, mode: ApiModes = ApiModes.LIVE, **options):
+        return cls(credentials=MerchantIdCredentials(mode, merchant_id), **options)
+
+    @classmethod
+    def with_alma_session(
+        cls,
+        session_id: str,
+        cookie_name: str = "alma_sess",
+        mode: ApiModes = ApiModes.LIVE,
+        **options
+    ):
+        return cls(credentials=AlmaSessionCredentials(mode, session_id, cookie_name), **options)
+
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        credentials: Optional[Credentials] = None,
+        mode: Optional[ApiModes] = None,
+        **kwargs
+    ):
+        """
+        Create a new instance of the Alma API Client.
+
+        It is recommended to use one the convenience methods instead of the default constructor:
+        - Client.with_api_key
+        - Client.with_merchant_id
+        - Client.with_alma_session
+
+        :param  api_key:    Deprecated - use Client.with_api_key("<api_key>") instead
+        :type   api_key:    str
+
+        :param      credentials   A `Credentials` instance to be used to configure requests made to
+                                the API. This would typically be set by one of the convenience
+                                methods mentioned above.
+        :type       credentials Credentials
+
+        :param      mode        Deprecated. Use `mode` param of convenience methods above
+                                API mode to be used: either ApiModes.LIVE or ApiModes.TEST
+        :type       mode        ApiModes
+
+        :keyword    logger      A logger instance to be used instead of the default one
+        :keyword    api_root    root URL(s) to call Alma's API at.
+                                You probably don't want to change it!
+
+                                Expected types:
+                                -------------
+                                str: the provided URL will be used for both LIVE and TEST modes
+                                dict: must have two keys, ApiModes.LIVE and ApiModes.TEST, each
+                                      value must be the URL to be used for each mode
+
+        """
+        if isinstance(credentials, ApiKeyCredentials):
+            api_key = credentials.api_key
+
+        if not credentials:
+            if not api_key:
+                raise ValueError("Valid credentials are required to instantiate a new Client")
+
+            # Backward compatibility with the older init method
+            credentials = ApiKeyCredentials(api_key)
 
         options = {
             "api_root": {ApiModes.TEST: self.SANDBOX_API_URL, ApiModes.LIVE: self.LIVE_API_URL},
-            "mode": ApiModes.LIVE if api_key.startswith("sk_live") else ApiModes.TEST,
+            "mode": mode if mode is not None else credentials.mode,
             "logger": logging.getLogger("alma-python-client"),
-            **options,
+            "credentials": credentials,
+            **kwargs,
         }
 
         if type(options["api_root"]) is str:
@@ -37,10 +107,9 @@ class Client:
                 )
             )
 
-        self.context = Context(api_key, options)
-
+        self.context = Context(options)
         self.init_user_agent()
-        self._endpoints = {}
+        self._endpoints = {}  # type: ignore
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)

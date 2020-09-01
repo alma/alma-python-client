@@ -1,6 +1,5 @@
 class Context:
-    def __init__(self, api_key, options):
-        self.api_key = api_key
+    def __init__(self, options):
         self.options = options
 
         self.user_agent_components = []
@@ -16,6 +15,10 @@ class Context:
     @property
     def mode(self):
         return self.options["mode"]
+
+    @property
+    def credentials(self):
+        return self.options["credentials"]
 
     def url_for(self, path):
         root = self.api_root[self.mode].rstrip("/")
