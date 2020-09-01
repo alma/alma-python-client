@@ -1,6 +1,6 @@
 # Changelog
 
-1.2.0 (unreleased)
+1.2.0 (2020-09-01)
 ------------------
 
 - Add support for different authentication methods
