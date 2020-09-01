@@ -3,7 +3,8 @@
 1.2.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add support for different authentication methods
+- Add Black & isort checks on pull requests
 
 
 1.1.0 (2020-03-25)

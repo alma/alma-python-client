@@ -16,7 +16,7 @@ pip install alma-client
 ```python
 from alma import Client
 
-alma_client = Client(api_key="sk_test..")
+alma_client = Client.with_api_key("sk_test..")
 payments = alma_client.payments.fetch_all()
 
 for p in payments:
