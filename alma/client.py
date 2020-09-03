@@ -92,7 +92,7 @@ class Client:
         session_id: str,
         cookie_name: str = "alma_sess",
         mode: ApiModes = ApiModes.LIVE,
-        **options
+        **options,
     ):
         return cls(credentials=AlmaSessionCredentials(mode, session_id, cookie_name), **options)
 
@@ -101,7 +101,7 @@ class Client:
         api_key: Optional[str] = None,
         credentials: Optional[Credentials] = None,
         mode: Optional[ApiModes] = None,
-        **kwargs
+        **kwargs,
     ):
         """
         Create a new instance of the Alma API Client.
@@ -162,9 +162,7 @@ class Client:
 
         if options["mode"] not in (ApiModes.LIVE, ApiModes.TEST):
             raise ValueError(
-                "`mode` option must be one of ({LIVE}, {TEST})".format(
-                    LIVE=ApiModes.LIVE.value, TEST=ApiModes.TEST.value
-                )
+                f"`mode` option must be one of ({ApiModes.LIVE.value}, {ApiModes.TEST.value})"
             )
 
         self.context = Context(options)

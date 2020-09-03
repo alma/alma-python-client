@@ -30,11 +30,7 @@ class Exports(Base):
         return self.request(self.EXPORTS_PATH).set_body(data).post().expectJson(Export)
 
     def get_file(self, export_id: str, export_format: ExportFormat = None):
-        request = self.request(
-            "{EXPORTS_PATH}/{export_id}".format(
-                EXPORTS_PATH=self.EXPORTS_PATH, export_id=export_id
-            )
-        )
+        request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
         if export_format:
             request.set_query_params({"format": export_format.value})
 
@@ -54,12 +50,4 @@ class Exports(Base):
         if export_id is None:
             return self.fetch_all(limit=limit, **filters)
         else:
-            return (
-                self.request(
-                    "{EXPORTS_PATH}/{export_id}".format(
-                        EXPORTS_PATH=self.EXPORTS_PATH, export_id=export_id
-                    )
-                )
-                .get()
-                .expectJson(Export)
-            )
+            return self.request(f"{self.EXPORTS_PATH}/{export_id}").get().expectJson(Export)

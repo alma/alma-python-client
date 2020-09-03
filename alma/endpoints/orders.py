@@ -9,12 +9,7 @@ class Orders(Base):
 
     def update(self, order_id, data):
         return (
-            self.request(
-                "{ORDERS_PATH}/{order_id}".format(ORDERS_PATH=self.ORDERS_PATH, order_id=order_id)
-            )
-            .set_body(data)
-            .put()
-            .expectJson(Order)
+            self.request(f"{self.ORDERS_PATH}/{order_id}").set_body(data).put().expectJson(Order)
         )
 
     def fetch_all(self, limit: int = 20, starting_after: str = None, **filters):
@@ -39,12 +34,4 @@ class Orders(Base):
         if order_id is None:
             return self.fetch_all(limit=limit, **filters)
         else:
-            return (
-                self.request(
-                    "{ORDERS_PATH}/{order_id}".format(
-                        ORDERS_PATH=self.ORDERS_PATH, order_id=order_id
-                    )
-                )
-                .get()
-                .expectJson(Order)
-            )
+            return self.request(f"{self.ORDERS_PATH}/{order_id}").get().expectJson(Order)

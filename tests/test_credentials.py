@@ -15,9 +15,7 @@ class ApiKeyCredentialsTest(TestCase):
     def test_it_adds_authentication_header(self):
         self.credentials.configure(self.request)
         assert "Authorization" in self.request.headers
-        assert self.request.headers["Authorization"] == "Alma-Auth {api_key}".format(
-            api_key=self.api_key
-        )
+        assert self.request.headers["Authorization"] == f"Alma-Auth {self.api_key}"
 
 
 class MerchantIdCredentialsTest(TestCase):
@@ -32,9 +30,7 @@ class MerchantIdCredentialsTest(TestCase):
         self.credentials.configure(self.request)
 
         assert "Authorization" in self.request.headers
-        assert self.request.headers["Authorization"] == "Alma-Merchant-Auth {merchant_id}".format(
-            merchant_id=self.merchant_id
-        )
+        assert self.request.headers["Authorization"] == f"Alma-Merchant-Auth {self.merchant_id}"
 
 
 class AlmaSessionCredentialsTest(TestCase):

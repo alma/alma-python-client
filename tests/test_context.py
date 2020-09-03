@@ -23,9 +23,7 @@ class ContextTest(TestCase):
 
     def test_context_expose_user_agent_string(self):
         assert self.context.user_agent_string().startswith(
-            "alma-client/{alma_version}; Python/{python_version}".format(
-                alma_version=alma_version, python_version=platform.python_version()
-            )
+            f"alma-client/{alma_version}; Python/{platform.python_version}"
         )
 
     def test_context_exposes_credentials(self):

@@ -1,9 +1,14 @@
 # Changelog
 
-1.2.1 (unreleased)
+2.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+**Breaking changes**
+
+- Move from requests to HTTPX
+- Handle both sync and async python clients
+- Remove support for Python 3.5
+- Add support for Python 3.9
 
 
 1.2.0 (2020-09-01)
