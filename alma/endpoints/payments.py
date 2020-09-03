@@ -10,13 +10,12 @@ class Payments(Base):
     PAYMENTS_PATH = "/v1/payments"
 
     def eligibility(self, order_data):
-        response = (
+        return (
             self.request("{PAYMENTS_PATH}/eligibility".format(PAYMENTS_PATH=self.PAYMENTS_PATH))
             .set_body(order_data)
             .post()
+            .expect(lambda response: Eligibility(response.json))
         )
-
-        return Eligibility(response.json)
 
     def create(self, data):
         response = self.request(self.PAYMENTS_PATH).set_body(data).post()
