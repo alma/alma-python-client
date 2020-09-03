@@ -1,5 +1,7 @@
 from functools import wraps
 
+from .paginated_results import PaginatedResults
+
 
 def configure_credentials(func):
     def decorator(f):
@@ -46,6 +48,14 @@ class Request:
 
     def expect(self, response_processor):
         self.response_processor = response_processor
+        return self
+
+    def expectJson(self, cls):
+        self.response_processor = lambda response: cls(response.json)
+        return self
+
+    def expectPaginatedList(self, cls, next_page):
+        self.response_processor = lambda response: PaginatedResults(response.json, cls, next_page)
         return self
 
     @configure_credentials

@@ -23,3 +23,6 @@ class RequestTest(TestCase):
 
     def test_credentials_configure_is_called_on_put(self):
         self.assert_method_calls_configure("put")
+
+    def test_credentials_configure_is_called_on_delete(self):
+        self.assert_method_calls_configure("delete")
