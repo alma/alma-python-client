@@ -13,7 +13,7 @@ class Payments(Base):
             self.request(f"{self.PAYMENTS_PATH}/eligibility")
             .set_body(order_data)
             .post()
-            .expect(lambda response: Eligibility(response.json))
+            .expectJson(Eligibility)
         )
 
     def create(self, data):
