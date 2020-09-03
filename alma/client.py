@@ -1,7 +1,7 @@
 import logging
 import platform
 from functools import wraps
-from typing import Optional
+from typing import Dict, Optional
 
 import httpx
 
@@ -167,7 +167,7 @@ class Client:
 
         self.context = Context(options)
         self.init_user_agent()
-        self._endpoints = {}  # type: ignore
+        self._endpoints = {}  # type: Dict[str, endpoints.Base]
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
