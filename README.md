@@ -12,6 +12,10 @@ pip install alma-client
 
 ## Demo
 
+We support both a sync and async client.
+
+### Synchroneous client
+
 
 ```python
 from alma import Client
@@ -23,7 +27,7 @@ for p in payments:
     print(f"{p.id}: Paiement en {len(p.payment_plan)} fois")
 
 
-payment_data = { 
+payment_data = {
     "payment": {
         "purchase_amount": 10000,
         "return_url": "http://merchant.com/payment-success",
@@ -38,6 +42,39 @@ payment_data = {
 }
 
 eligibility = alma_client.payments.eligibility(payment_data)
+if eligibility.eligible:
+    alma_client.payments.create(payment_data)
+```
+
+
+### Asynchroneous client
+
+
+```python
+from alma import AsyncClient
+
+alma_client = AsyncClient.with_api_key("sk_test..")
+payments = await alma_client.payments.fetch_all()
+
+for p in payments:
+    print(f"{p.id}: Paiement en {len(p.payment_plan)} fois")
+
+
+payment_data = {
+    "payment": {
+        "purchase_amount": 10000,
+        "return_url": "http://merchant.com/payment-success",
+        "shipping_address": {
+            "first_name": "Martin",
+            "last_name": "Dupond",
+            "line1": "1 rue de Rivoli",
+            "postal_code": "75004",
+            "city": "Paris"
+        }
+    }
+}
+
+eligibility = await alma_client.payments.eligibility(payment_data)
 if eligibility.eligible:
     alma_client.payments.create(payment_data)
 ```
