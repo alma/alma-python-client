@@ -43,7 +43,10 @@ def request_processor(func):
             req = f(*args, **kwargs)
             if isinstance(req, Request):
                 resp = await process_request(req)
-                return req.response_processor(resp)
+                response = req.response_processor(resp)
+                if hasattr(response, "next_page"):
+                    setattr(response, "next_page", request_processor(response.next_page))
+                return response
             return req
 
         return decorated
