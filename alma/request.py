@@ -1,8 +1,6 @@
 from functools import wraps
 
-import requests
-
-from .response import Response
+from .paginated_results import PaginatedResults
 
 
 def configure_credentials(func):
@@ -36,6 +34,7 @@ class Request:
         self.cookies = {}
         self.params = {}
         self.body = None
+        self.response_processor = lambda x: True
 
     def set_body(self, value):
         self.body = value
@@ -47,34 +46,34 @@ class Request:
         self.params = params
         return self
 
+    def expect(self, response_processor):
+        self.response_processor = response_processor
+        return self
+
+    def expectJson(self, cls):
+        self.response_processor = lambda response: cls(response.json)
+        return self
+
+    def expectPaginatedList(self, cls, next_page):
+        self.response_processor = lambda response: PaginatedResults(response.json, cls, next_page)
+        return self
+
     @configure_credentials
     def get(self):
-        res = requests.get(self.url, self.params, headers=self.headers, cookies=self.cookies)
-        return self._process_response(res)
+        self.method = "GET"
+        return self
 
     @configure_credentials
     def post(self):
-        res = requests.post(self.url, json=self.body, headers=self.headers, cookies=self.cookies)
-        return self._process_response(res)
+        self.method = "POST"
+        return self
 
     @configure_credentials
     def put(self):
-        res = requests.put(self.url, json=self.body, headers=self.headers, cookies=self.cookies)
-        return self._process_response(res)
+        self.method = "PUT"
+        return self
 
-    def _process_response(self, resp):
-        response = Response(resp)
-
-        try:
-            resp.raise_for_status()
-        except requests.HTTPError as e:
-            if response.is_json() and "message" in response.json:
-                error = response.json["message"]
-            elif response.is_json() and "error" in response.json:
-                error = response.json["error"]
-            else:
-                error = e.strerror
-
-            raise RequestError(error, self, response)
-
-        return response
+    @configure_credentials
+    def delete(self):
+        self.method = "DELETE"
+        return self

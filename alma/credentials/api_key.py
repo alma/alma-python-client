@@ -8,7 +8,7 @@ class ApiKeyCredentials(Credentials):
         super().__init__(self.mode)
 
     def configure(self, request):
-        request.headers["Authorization"] = "Alma-Auth {api_key}".format(api_key=self.api_key)
+        request.headers["Authorization"] = f"Alma-Auth {self.api_key}"
 
     @property
     def mode(self):

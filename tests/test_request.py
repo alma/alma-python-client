@@ -11,9 +11,7 @@ class RequestTest(TestCase):
         self.request = Request(client.context, "https://url.com")
 
     def assert_method_calls_configure(self, method):
-        with mock.patch(
-            "alma.credentials.ApiKeyCredentials.configure"
-        ) as mocked_configure, mock.patch("alma.request.requests"):
+        with mock.patch("alma.credentials.ApiKeyCredentials.configure") as mocked_configure:
             getattr(self.request, method)()
             mocked_configure.assert_called_once_with(self.request)
 
@@ -25,3 +23,6 @@ class RequestTest(TestCase):
 
     def test_credentials_configure_is_called_on_put(self):
         self.assert_method_calls_configure("put")
+
+    def test_credentials_configure_is_called_on_delete(self):
+        self.assert_method_calls_configure("delete")

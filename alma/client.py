@@ -1,6 +1,9 @@
 import logging
 import platform
-from typing import Optional
+from functools import wraps
+from typing import Dict, Optional
+
+import httpx
 
 from . import endpoints
 from .api_modes import ApiModes
@@ -11,7 +14,64 @@ from .credentials import (
     Credentials,
     MerchantIdCredentials,
 )
+from .request import Request, RequestError
+from .response import Response
 from .version import __version__ as alma_version
+
+
+def process_request(req):
+    request = httpx.Request(
+        req.method,
+        req.url,
+        headers=req.headers,
+        cookies=req.cookies,
+        params=req.params,
+        data=req.body,
+    )
+    with httpx.Client() as client:
+        resp = client.send(request)
+
+    response = Response(resp)
+    try:
+        resp.raise_for_status()
+    except httpx.HTTPStatusErrorHTTPError as e:
+        if response.is_json() and "message" in response.json:
+            error = response.json["message"]
+        elif response.is_json() and "error" in response.json:
+            error = response.json["error"]
+        else:
+            error = e.strerror
+
+        raise RequestError(error, req.endpoint, response)
+
+    return response
+
+
+def request_processor(func):
+    def decorator(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            req = f(*args, **kwargs)
+            if isinstance(req, Request):
+                resp = process_request(req)
+                response = req.response_processor(resp)
+                if hasattr(response, "next_page"):
+                    setattr(response, "next_page", request_processor(response.next_page))
+                return response
+            return req
+
+        return decorated
+
+    return decorator(func)
+
+
+class EndpointHandler:
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
+
+    def __getattr__(self, attr):
+        method = getattr(self.endpoint, attr)
+        return request_processor(method)
 
 
 class Client:
@@ -32,7 +92,7 @@ class Client:
         session_id: str,
         cookie_name: str = "alma_sess",
         mode: ApiModes = ApiModes.LIVE,
-        **options
+        **options,
     ):
         return cls(credentials=AlmaSessionCredentials(mode, session_id, cookie_name), **options)
 
@@ -41,7 +101,7 @@ class Client:
         api_key: Optional[str] = None,
         credentials: Optional[Credentials] = None,
         mode: Optional[ApiModes] = None,
-        **kwargs
+        **kwargs,
     ):
         """
         Create a new instance of the Alma API Client.
@@ -102,14 +162,12 @@ class Client:
 
         if options["mode"] not in (ApiModes.LIVE, ApiModes.TEST):
             raise ValueError(
-                "`mode` option must be one of ({LIVE}, {TEST})".format(
-                    LIVE=ApiModes.LIVE.value, TEST=ApiModes.TEST.value
-                )
+                f"`mode` option must be one of ({ApiModes.LIVE.value}, {ApiModes.TEST.value})"
             )
 
         self.context = Context(options)
         self.init_user_agent()
-        self._endpoints = {}  # type: ignore
+        self._endpoints: Dict[str, endpoints.Base] = {}
 
     def add_user_agent_component(self, component, version):
         self.context.add_user_agent_component(component, version)
@@ -122,7 +180,7 @@ class Client:
         endpoint = self._endpoints.get(endpoint_name)
 
         if endpoint is None:
-            endpoint = getattr(endpoints, endpoint_name)(self.context)
+            endpoint = EndpointHandler(getattr(endpoints, endpoint_name)(self.context))
             self._endpoints[endpoint] = endpoint
 
         return endpoint

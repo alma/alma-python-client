@@ -1,0 +1,74 @@
+from functools import wraps
+
+import httpx
+
+from . import endpoints
+from .client import Client
+from .request import Request, RequestError
+from .response import Response
+
+
+async def process_request(req):
+    request = httpx.Request(
+        req.method,
+        req.url,
+        headers=req.headers,
+        cookies=req.cookies,
+        params=req.params,
+        data=req.body,
+    )
+    async with httpx.AsyncClient() as client:
+        resp = await client.send(request)
+
+    response = Response(resp)
+    try:
+        resp.raise_for_status()
+    except httpx.HTTPStatusErrorHTTPError as e:
+        if response.is_json() and "message" in response.json:
+            error = response.json["message"]
+        elif response.is_json() and "error" in response.json:
+            error = response.json["error"]
+        else:
+            error = e.strerror
+
+        raise RequestError(error, req.endpoint, response)
+
+    return response
+
+
+def request_processor(func):
+    def decorator(f):
+        @wraps(f)
+        async def decorated(*args, **kwargs):
+            req = f(*args, **kwargs)
+            if isinstance(req, Request):
+                resp = await process_request(req)
+                response = req.response_processor(resp)
+                if hasattr(response, "next_page"):
+                    setattr(response, "next_page", request_processor(response.next_page))
+                return response
+            return req
+
+        return decorated
+
+    return decorator(func)
+
+
+class EndpointHandler:
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
+
+    def __getattr__(self, attr):
+        method = getattr(self.endpoint, attr)
+        return request_processor(method)
+
+
+class AsyncClient(Client):
+    def _endpoint(self, endpoint_name):
+        endpoint = self._endpoints.get(endpoint_name)
+
+        if endpoint is None:
+            endpoint = EndpointHandler(getattr(endpoints, endpoint_name)(self.context))
+            self._endpoints[endpoint] = endpoint
+
+        return endpoint

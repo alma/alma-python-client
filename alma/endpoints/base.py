@@ -3,6 +3,7 @@ from ..request import Request
 
 class Base:
     def __init__(self, context):
+        self.endpoint = self
         self.context = context
 
     @property

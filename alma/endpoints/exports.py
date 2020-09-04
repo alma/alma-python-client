@@ -3,7 +3,6 @@ from functools import partial
 from io import BytesIO
 
 from ..entities import Export, ExportFormat, ExportType
-from ..paginated_results import PaginatedResults
 from . import Base
 
 
@@ -28,34 +27,27 @@ class Exports(Base):
         if end:
             data["end"] = int(end.timestamp())
 
-        response = self.request(self.EXPORTS_PATH).set_body(data).post()
-        return Export(response.json)
+        return self.request(self.EXPORTS_PATH).set_body(data).post().expectJson(Export)
 
     def get_file(self, export_id: str, export_format: ExportFormat = None):
-        request = self.request(
-            "{EXPORTS_PATH}/{export_id}".format(
-                EXPORTS_PATH=self.EXPORTS_PATH, export_id=export_id
-            )
-        )
+        request = self.request(f"{self.EXPORTS_PATH}/{export_id}")
         if export_format:
             request.set_query_params({"format": export_format.value})
 
-        response = request.get()
-        return BytesIO(response.resp.content)
+        return request.get().expect(lambda response: BytesIO(response.resp.content))
 
     def fetch_all(self, limit: int = 5, **filters):
         args = {"limit": limit, **filters}
-        response = self.request(self.EXPORTS_PATH).set_query_params(args).get()
         next_page = partial(self.fetch_all, limit=limit, **filters)
-        return PaginatedResults(response.json, Export, next_page)
+        return (
+            self.request(self.EXPORTS_PATH)
+            .set_query_params(args)
+            .get()
+            .expectPaginatedList(Export, next_page)
+        )
 
     def fetch(self, export_id: str = None, limit: int = 5, **filters):
         if export_id is None:
             return self.fetch_all(limit=limit, **filters)
         else:
-            response = self.request(
-                "{EXPORTS_PATH}/{export_id}".format(
-                    EXPORTS_PATH=self.EXPORTS_PATH, export_id=export_id
-                )
-            ).get()
-            return Export(response.json)
+            return self.request(f"{self.EXPORTS_PATH}/{export_id}").get().expectJson(Export)

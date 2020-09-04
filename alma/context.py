@@ -23,12 +23,10 @@ class Context:
     def url_for(self, path):
         root = self.api_root[self.mode].rstrip("/")
 
-        return "{root}/{path}".format(root=root, path=path.lstrip("/"))
+        return f"{root}/{path.lstrip('/')}"
 
     def add_user_agent_component(self, component, version):
-        self.user_agent_components.append(
-            "{component}/{version}".format(component=component, version=version)
-        )
+        self.user_agent_components.append(f"{component}/{version}")
 
     def user_agent_string(self):
         return "; ".join(self.user_agent_components[::-1])
