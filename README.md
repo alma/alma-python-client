@@ -14,7 +14,7 @@ pip install alma-client
 
 We support both a sync and async client.
 
-### Synchroneous client
+### Synchronous client
 
 
 ```python
@@ -43,11 +43,13 @@ payment_data = {
 
 eligibility = alma_client.payments.eligibility(payment_data)
 if eligibility.eligible:
-    alma_client.payments.create(payment_data)
+    payment = alma_client.payments.create(payment_data)
+
+print(payment.raw_data)
 ```
 
 
-### Asynchroneous client
+### Asynchronous client
 
 
 ```python
@@ -76,5 +78,7 @@ payment_data = {
 
 eligibility = await alma_client.payments.eligibility(payment_data)
 if eligibility.eligible:
-    alma_client.payments.create(payment_data)
+    payment = await alma_client.payments.create(payment_data)
+
+print(payment.raw_data)
 ```
