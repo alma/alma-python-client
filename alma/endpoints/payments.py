@@ -13,7 +13,9 @@ class Payments(Base):
             self.request(f"{self.PAYMENTS_PATH}/eligibility")
             .set_body(order_data)
             .post()
-            .expectJson(Eligibility)
+            .expect(
+                lambda x: [Eligibility(i) for i in x] if isinstance(x, list) else Eligibility(x)
+            )
         )
 
     def create(self, data):
