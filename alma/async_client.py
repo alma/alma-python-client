@@ -23,15 +23,15 @@ async def process_request(req):
     response = Response(resp)
     try:
         resp.raise_for_status()
-    except httpx.HTTPStatusErrorHTTPError as e:
+    except httpx.HTTPStatusError as e:
         if response.is_json() and "message" in response.json:
             error = response.json["message"]
         elif response.is_json() and "error" in response.json:
             error = response.json["error"]
         else:
-            error = e.strerror
+            error = str(e)
 
-        raise RequestError(error, req.endpoint, response)
+        raise RequestError(error, req.url, response)
 
     return response
 
