@@ -26,7 +26,7 @@ def process_request(req):
         headers=req.headers,
         cookies=req.cookies,
         params=req.params,
-        data=req.body,
+        json=req.body,
     )
     with httpx.Client() as client:
         resp = client.send(request)

@@ -15,7 +15,7 @@ async def process_request(req):
         headers=req.headers,
         cookies=req.cookies,
         params=req.params,
-        data=req.body,
+        json=req.body,
     )
     async with httpx.AsyncClient() as client:
         resp = await client.send(request)

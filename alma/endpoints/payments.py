@@ -14,7 +14,9 @@ class Payments(Base):
             .set_body(order_data)
             .post()
             .expect(
-                lambda x: [Eligibility(i) for i in x] if isinstance(x, list) else Eligibility(x)
+                lambda response: [Eligibility(i) for i in response.json]
+                if isinstance(response.json, list)
+                else Eligibility(response.json)
             )
         )
 
