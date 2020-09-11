@@ -24,7 +24,12 @@ class Payments(Base):
         return self.request(self.PAYMENTS_PATH).set_body(data).post().expectJson(Payment)
 
     def update(self, payment_id, data):
-        return self.request(f"{self.PAYMENTS_PATH}/{payment_id}").set_body(data).post().expectJson(Payment)
+        return (
+            self.request(f"{self.PAYMENTS_PATH}/{payment_id}")
+            .set_body(data)
+            .post()
+            .expectJson(Payment)
+        )
 
     def fetch_all(self, limit: int = 20, states: list = None, starting_after: str = None):
         args = {"limit": str(limit)}
@@ -101,7 +106,11 @@ class Payments(Base):
         )
 
     def ask_acceptance(self, payment_id: str) -> Payment:
-        return self.request(f"{self.PAYMENTS_PATH}/{payment_id}/ask-acceptance").get().expectJson(Payment)
+        return (
+            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/ask-acceptance")
+            .get()
+            .expectJson(Payment)
+        )
 
     def charge_first_installment(self, payment_id: str, data) -> Payment:
         req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/charge-first-installment")
