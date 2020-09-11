@@ -24,12 +24,7 @@ class Payments(Base):
         return self.request(self.PAYMENTS_PATH).set_body(data).post().expectJson(Payment)
 
     def update(self, payment_id, data):
-        return (
-            self.request(f"{self.PAYMENTS_PATH}/{payment_id}")
-            .set_body(data)
-            .post()
-            .expectJson(Payment)
-        )
+        return self.request(f"{self.PAYMENTS_PATH}/{payment_id}").set_body(data).post().expectJson(Payment)
 
     def fetch_all(self, limit: int = 20, states: list = None, starting_after: str = None):
         args = {"limit": str(limit)}
@@ -105,6 +100,16 @@ class Payments(Base):
             .expect(lambda response: [Order(o) for o in response.json])
         )
 
+    def ask_acceptance(self, payment_id: str) -> Payment:
+        return self.request(f"{self.PAYMENTS_PATH}/{payment_id}/ask-acceptance").get().expectJson(Payment)
+
+    def charge_first_installment(self, payment_id: str, data) -> Payment:
+        req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/charge-first-installment")
+
+        req.set_body(data)
+
+        return req.post().expectJson(Payment)
+
     def refund(self, payment_id: str, amount: int, full_refund: bool = False, **params) -> Payment:
         """
         Refunds given payment of the given amount (in cents).
@@ -117,7 +122,7 @@ class Payments(Base):
                             Default: false.
         :return: Updated payment object
         """
-        req = self.request("{self.PAYMENTS_PATH}/{payment_id}/refund")
+        req = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/refund")
 
         refund_params = {}
         if not full_refund:
