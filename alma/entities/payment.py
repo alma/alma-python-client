@@ -7,6 +7,8 @@ from .refund import Refund
 
 
 class PaymentState(Enum):
+    # Payment has been created but its payment plan is not yet initialized
+    NOT_READY = "not_ready"
     # Payment was just created, not scored and nothing paid yet
     NOT_STARTED = "not_started"
     # Was scored and not accepted
@@ -54,8 +56,8 @@ class Payment(Base):
                 self.state = PaymentState(state)
             except ValueError:
                 # Pass on unrecognized state values
-                # they will be accessible as-is in the Payment data
-                pass
+                # restore it in the raw Payment data so that it can still be retrieved
+                data["state"] = state
 
         orders = data.pop("orders", [])
         self.orders = [Order(o) for o in orders]
