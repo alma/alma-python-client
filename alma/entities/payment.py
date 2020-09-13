@@ -7,6 +7,8 @@ from .refund import Refund
 
 
 class PaymentState(Enum):
+    # Payment has been created but its payment plan is not yet initialized
+    NOT_READY = "not_ready"
     # Payment was just created, not scored and nothing paid yet
     NOT_STARTED = "not_started"
     # Was scored and not accepted
