@@ -56,8 +56,8 @@ class Payment(Base):
                 self.state = PaymentState(state)
             except ValueError:
                 # Pass on unrecognized state values
-                # they will be accessible as-is in the Payment data
-                pass
+                # restore it in the raw Payment data so that it can still be retrieved
+                data["state"] = state
 
         orders = data.pop("orders", [])
         self.orders = [Order(o) for o in orders]
