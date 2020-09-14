@@ -1,4 +1,6 @@
-from ..entities import Merchant
+from typing import List, Optional
+
+from ..entities import FeePlan, FeePlanKind, Merchant
 from . import Base
 
 
@@ -12,4 +14,17 @@ class Merchants(Base):
             self.request(self.EXTENDED_ME_PATH if extended else self.ME_PATH)
             .get()
             .expectJson(Merchant)
+        )
+
+    def fee_plans(self, kind: FeePlanKind, only: Optional[List[int]] = None):
+        params = {"kind": kind.value}
+
+        if only is not None:
+            params["only"] = ",".join(str(i) for i in only)
+
+        return (
+            self.request(f"{self.ME_PATH}/fee-plans")
+            .set_query_params(params)
+            .get()
+            .expect(lambda resp: [FeePlan(fp) for fp in resp.json])
         )
