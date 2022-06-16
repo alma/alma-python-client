@@ -15,9 +15,14 @@ class Exports(Base):
         payout_id: str = None,
         start: datetime = None,
         end: datetime = None,
+        include_child_accounts = False,
+        custom_fields = None,
     ):
         """ Create a new export"""
-        data = {"type": export_type.value}
+        data = {
+            "type": export_type.value,
+            "include_child_accounts": include_child_accounts,
+        }
         if payout_id:
             data["payout"] = payout_id
 
@@ -26,6 +31,14 @@ class Exports(Base):
 
         if end:
             data["end"] = int(end.timestamp())
+        
+        if custom_fields:
+            if isinstance(custom_fields, str):
+                data["custom_fields"] = custom_fields
+            elif type(custom_fields) in (list, tuple, set):
+                data["custom_fields"] = ",".join(custom_fields)
+            else:
+                raise TypeError(f"Expected comma-separated string or a list/tuple/set of strings for custom_fields, got {type(custom_fields)}")
 
         return self.request(self.EXPORTS_PATH).set_body(data).post().expectJson(Export)
 
