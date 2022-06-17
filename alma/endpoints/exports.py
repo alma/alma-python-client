@@ -35,10 +35,11 @@ class Exports(Base):
         if custom_fields:
             if isinstance(custom_fields, str):
                 data["custom_fields"] = custom_fields
-            elif type(custom_fields) in (list, tuple, set):
-                data["custom_fields"] = ",".join(custom_fields)
             else:
-                raise TypeError(f"Expected comma-separated string or a list/tuple/set of strings for custom_fields, got {type(custom_fields)}")
+                try:
+                    data["custom_fields"] = ",".join(custom_fields)
+                except TypeError as e:
+                    raise TypeError(f"Expected comma-separated string or an iterable yielding strings for custom_fields, got {type(custom_fields)}") from e
 
         return self.request(self.EXPORTS_PATH).set_body(data).post().expectJson(Export)
 
