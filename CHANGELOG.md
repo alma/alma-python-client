@@ -1,9 +1,9 @@
 # Changelog
 
-2.1.0 (unreleased)
+2.0.1 (2022-06-17)
 ------------------
 
-Nothing yet.
+- Adds `include_child_accounts` and `custom_fields` params to the DataExport creation endpoint
 
 
 2.0.0 (2021-08-12)
