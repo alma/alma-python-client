@@ -53,7 +53,7 @@ class Payments(Base):
             return self.request(f"{self.PAYMENTS_PATH}/{payment_id}").get().expectJson(Payment)
 
     def flag_as_potential_fraud(self, payment_id, reason=None):
-        request = self.request("{self.PAYMENTS_PATH}/{payment_id}/potential-fraud")
+        request = self.request(f"{self.PAYMENTS_PATH}/{payment_id}/potential-fraud")
 
         if reason:
             request.set_body({"reason": reason})
@@ -73,7 +73,7 @@ class Payments(Base):
             order_data = [order_data]
 
         return (
-            self.request("{self.PAYMENTS_PATH}/{payment_id}/orders")
+            self.request(f"{self.PAYMENTS_PATH}/{payment_id}/orders")
             .set_body({"orders": order_data})
             .put()
             .expect(lambda response: [Order(o) for o in response.json])
@@ -148,4 +148,4 @@ class Payments(Base):
         Will raise RequestError if the SMS API is not activated on your account or
         in case of any other error, otherwise returns True.
         """
-        return self.request("{self.PAYMENTS_PATH}/{payment_id}/send-sms").post()
+        return self.request(f"{self.PAYMENTS_PATH}/{payment_id}/send-sms").post()
