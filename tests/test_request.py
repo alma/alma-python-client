@@ -1,7 +1,7 @@
 from unittest import TestCase, mock
 
-from alma import Client
-from alma.request import Request
+from alma_client import Client
+from alma_client.request import Request
 
 
 class RequestTest(TestCase):

@@ -7,17 +7,18 @@ python:
 - 3.6
 - 3.7
 - 3.8
-- 3.9-dev
+- 3.9
+- 3.10
 jobs:
   fast_finish: true
   include:
-  - python: 3.8
+  - python: 3.10
     env: TOXENV=flake8
   - name: "Code checks"
     if: type = pull_request
     dist: bionic
     language: python
-    python: 3.8
+    python: 3.10
     install: pip install pre-commit
     script:
       pre-commit run --all-files --show-diff-on-failure

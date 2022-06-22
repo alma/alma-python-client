@@ -1,5 +1,5 @@
-from alma import ApiModes
-from alma.request import Request
+from alma_client import ApiModes
+from alma_client.request import Request
 
 
 class Credentials:

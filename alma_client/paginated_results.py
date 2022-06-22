@@ -1,7 +1,7 @@
 from collections.abc import Iterable
 from typing import Callable, Type
 
-from alma.entities import Base as BaseEntity
+from alma_client.entities import Base as BaseEntity
 
 
 class PaginatedResults(Iterable):
