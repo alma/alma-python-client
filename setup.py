@@ -12,7 +12,7 @@ CHANGELOG = (HERE / "CHANGELOG.md").read_text()
 # This call to setup() does all the work
 setup(
     name="alma-client",
-    version="2.0.2",
+    version="3.0.0.dev0",
     description="Python API client for the Alma Installments API",
     long_description=f"{README}\n\n{CHANGELOG}",
     long_description_content_type="text/markdown",
