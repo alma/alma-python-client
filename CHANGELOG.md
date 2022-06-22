@@ -1,9 +1,9 @@
 # Changelog
 
-2.1.0 (unreleased)
+2.0.2 (2022-06-22)
 ------------------
 
-- Nothing changed yet.
+- Fix `potential-fraud` method URLs (#27)
 
 
 2.0.1 (2022-06-17)
