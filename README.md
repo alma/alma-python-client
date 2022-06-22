@@ -2,7 +2,9 @@
 
 [![Travis Build Status](https://travis-ci.org/alma/alma-python-client.svg?branch=main)](https://travis-ci.org/alma/alma-python-client) [![PyPI](https://img.shields.io/pypi/v/alma-client.svg)](https://pypi.python.org/pypi/alma-client)
 
-Python API Client for the Alma API
+Python API Client for the Alma API.
+
+Support Python >= 3.8
 
 ## Install
 
