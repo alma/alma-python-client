@@ -18,7 +18,7 @@ We support both a sync and async client.
 
 
 ```python
-from alma import Client
+from alma_client import Client
 
 alma_client = Client.with_api_key("sk_test..")
 payments = alma_client.payments.fetch_all()
@@ -53,7 +53,7 @@ print(payment.raw_data)
 
 
 ```python
-from alma import AsyncClient
+from alma_client import AsyncClient
 
 alma_client = AsyncClient.with_api_key("sk_test..")
 payments = await alma_client.payments.fetch_all()
