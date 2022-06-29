@@ -1,11 +1,12 @@
 # Changelog
 
-3.0.0 (unreleased)
+3.0.0 (2022-06-29)
 ------------------
 
 **Breaking change**
 
 - Move the code from the `alma` namespace into the `alma_client` namespace.
+- Remove support for Python 3.6 and Python 3.7
 
 
 2.0.2 (2022-06-22)
