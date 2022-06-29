@@ -1,5 +1,11 @@
 # Changelog
 
+3.1.0 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
 3.0.0 (2022-06-29)
 ------------------
 
