@@ -2,7 +2,9 @@
 
 [![Travis Build Status](https://travis-ci.org/alma/alma-python-client.svg?branch=main)](https://travis-ci.org/alma/alma-python-client) [![PyPI](https://img.shields.io/pypi/v/alma-client.svg)](https://pypi.python.org/pypi/alma-client)
 
-Python API Client for the Alma API
+Python API Client for the Alma API.
+
+Support Python >= 3.8
 
 ## Install
 
@@ -18,7 +20,7 @@ We support both a sync and async client.
 
 
 ```python
-from alma import Client
+from alma_client import Client
 
 alma_client = Client.with_api_key("sk_test..")
 payments = alma_client.payments.fetch_all()
@@ -53,7 +55,7 @@ print(payment.raw_data)
 
 
 ```python
-from alma import AsyncClient
+from alma_client import AsyncClient
 
 alma_client = AsyncClient.with_api_key("sk_test..")
 payments = await alma_client.payments.fetch_all()

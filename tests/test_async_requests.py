@@ -1,6 +1,6 @@
 import inspect
 
-from alma.async_client import AsyncClient
+from alma_client.async_client import AsyncClient
 
 
 def test_async_client():

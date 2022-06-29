@@ -3,7 +3,9 @@
 3.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+**Breaking change**
+
+- Move the code from the `alma` namespace into the `alma_client` namespace.
 
 
 2.0.2 (2022-06-22)

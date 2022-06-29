@@ -1,7 +1,7 @@
 from unittest import TestCase, mock
 
-from alma import Client
-from alma.request import Request
+from alma_client import Client
+from alma_client.request import Request
 
 
 class RequestTest(TestCase):
@@ -11,7 +11,7 @@ class RequestTest(TestCase):
         self.request = Request(client.context, "https://url.com")
 
     def assert_method_calls_configure(self, method):
-        with mock.patch("alma.credentials.ApiKeyCredentials.configure") as mocked_configure:
+        with mock.patch("alma_client.credentials.ApiKeyCredentials.configure") as mocked_configure:
             getattr(self.request, method)()
             mocked_configure.assert_called_once_with(self.request)
 

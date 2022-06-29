@@ -2,8 +2,8 @@ from unittest import TestCase
 
 import pytest
 
-from alma import ApiModes, Client
-from alma.credentials import AlmaSessionCredentials, ApiKeyCredentials, MerchantIdCredentials
+from alma_client import ApiModes, Client
+from alma_client.credentials import AlmaSessionCredentials, ApiKeyCredentials, MerchantIdCredentials
 
 
 class ClientTest(TestCase):

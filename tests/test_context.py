@@ -1,8 +1,8 @@
 import platform
 from unittest import TestCase
 
-from alma import Client
-from alma.version import __version__ as alma_version
+from alma_client import Client
+from alma_client.version import __version__ as alma_version
 
 
 class ContextTest(TestCase):

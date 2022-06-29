@@ -1,6 +1,6 @@
 from enum import Enum
 
-from alma.entities import Base
+from alma_client.entities import Base
 
 
 class FeePlanKind(Enum):
