@@ -1,4 +1,3 @@
-from functools import wraps
 import httpx
 import json
 
@@ -66,7 +65,7 @@ class Request:
 
     @property
     def data(self):
-      return json.dumps(self.body)
+        return json.dumps(self.body)
 
     def to_httpx(self):
         self.context.credentials.configure(self)
