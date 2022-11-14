@@ -9,14 +9,8 @@ from .response import Response
 
 
 async def process_request(req):
-    request = httpx.Request(
-        req.method,
-        req.url,
-        headers=req.headers,
-        cookies=req.cookies,
-        params=req.params,
-        json=req.body,
-    )
+
+    request = req.to_httpx()
     async with httpx.AsyncClient() as client:
         resp = await client.send(request)
 

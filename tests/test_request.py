@@ -13,6 +13,7 @@ class RequestTest(TestCase):
     def assert_method_calls_configure(self, method):
         with mock.patch("alma_client.credentials.ApiKeyCredentials.configure") as mocked_configure:
             getattr(self.request, method)()
+            req = self.request.to_httpx()
             mocked_configure.assert_called_once_with(self.request)
 
     def test_credentials_configure_is_called_on_get(self):

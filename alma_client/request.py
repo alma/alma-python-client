@@ -1,18 +1,8 @@
 from functools import wraps
+import httpx
+import json
 
 from .paginated_results import PaginatedResults
-
-
-def configure_credentials(func):
-    def decorator(f):
-        @wraps(f)
-        def decorated(request, *args, **kwargs):
-            request.context.credentials.configure(request)
-            return f(request, *args, **kwargs)
-
-        return decorated
-
-    return decorator(func)
 
 
 class RequestError(Exception):
@@ -58,22 +48,34 @@ class Request:
         self.response_processor = lambda response: PaginatedResults(response.json, cls, next_page)
         return self
 
-    @configure_credentials
     def get(self):
         self.method = "GET"
         return self
 
-    @configure_credentials
     def post(self):
         self.method = "POST"
         return self
 
-    @configure_credentials
     def put(self):
         self.method = "PUT"
         return self
 
-    @configure_credentials
     def delete(self):
         self.method = "DELETE"
         return self
+
+    @property
+    def data(self):
+      return json.dumps(self.body)
+
+    def to_httpx(self):
+        self.context.credentials.configure(self)
+        req = httpx.Request(
+            self.method,
+            self.url,
+            headers=self.headers | {'Content-Type': 'application/json'},
+            cookies=self.cookies,
+            params=self.params,
+            content=self.data,
+        )
+        return req
