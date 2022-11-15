@@ -1,5 +1,6 @@
-import httpx
 import json
+
+import httpx
 
 from .paginated_results import PaginatedResults
 
@@ -69,10 +70,12 @@ class Request:
 
     def to_httpx(self):
         self.context.credentials.configure(self)
+        headers = dict(self.headers)
+        headers["Content-Type"] = "application/json"
         req = httpx.Request(
             self.method,
             self.url,
-            headers=self.headers | {'Content-Type': 'application/json'},
+            headers=headers,
             cookies=self.cookies,
             params=self.params,
             content=self.data,
