@@ -20,14 +20,8 @@ from .version import __version__ as alma_version
 
 
 def process_request(req):
-    request = httpx.Request(
-        req.method,
-        req.url,
-        headers=req.headers,
-        cookies=req.cookies,
-        params=req.params,
-        json=req.body,
-    )
+
+    request = req.to_httpx()
     with httpx.Client() as client:
         resp = client.send(request)
 
