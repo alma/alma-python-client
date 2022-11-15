@@ -46,7 +46,7 @@ flake8: install-dev
 	$(VENV)/bin/flake8 setup.py alma tests
 
 mypy: install-dev
-	$(VENV)/bin/mypy --ignore-missing-imports --scripts-are-modules alma
+	$(VENV)/bin/mypy --ignore-missing-imports --scripts-are-modules --implicit-optional alma
 
 build-requirements:
 	$(VIRTUALENV) $(TEMPDIR)
