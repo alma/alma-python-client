@@ -70,7 +70,7 @@ class Request:
 
     def to_httpx(self):
         self.context.credentials.configure(self)
-        headers = dict(self.headers)
+        headers = self.headers.copy()
         headers["Content-Type"] = "application/json"
         req = httpx.Request(
             self.method,
