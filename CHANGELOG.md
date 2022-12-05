@@ -1,9 +1,9 @@
 # Changelog
 
-3.1.0 (unreleased)
+3.0.1 (2022-12-05)
 ------------------
 
-- Nothing changed yet.
+- Configure credentials later in the flow.
 
 
 3.0.0 (2022-06-29)
