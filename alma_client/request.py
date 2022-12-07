@@ -1,4 +1,5 @@
 import json
+from typing import Optional
 
 import httpx
 
@@ -65,8 +66,8 @@ class Request:
         return self
 
     @property
-    def data(self):
-        return json.dumps(self.body)
+    def data(self) -> Optional[bytes]:
+        return json.dumps(self.body).encode("utf-8") if self.body is not None else None
 
     def to_httpx(self):
         self.context.credentials.configure(self)
