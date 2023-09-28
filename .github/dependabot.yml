@@ -11,6 +11,8 @@ updates:
       github-actions:
         patterns:
           - "*"
+    reviewers:
+      - alma/squad-devx
 
   - package-ecosystem: pip
     directory: "/"
