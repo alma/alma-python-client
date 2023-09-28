@@ -21,6 +21,10 @@ updates:
       day: sunday
       time: "20:00"
     groups:
-      python:
+      # Separate minor/patches updates from major updates, which will all have their own PR
+      python-minor-patches:
         patterns:
           - "*"
+        update-types:
+          - minor
+          - patch
